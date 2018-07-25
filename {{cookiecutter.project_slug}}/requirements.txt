@@ -1,0 +1,6 @@
+Django
+psycopg2
+dj-database-url
+whitenoise
+pytest
+Sphinx
