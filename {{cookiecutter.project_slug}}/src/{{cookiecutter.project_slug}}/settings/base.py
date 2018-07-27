@@ -16,7 +16,8 @@ import dj_database_url
 from django.core.exceptions import ImproperlyConfigured
 
 
-BOOLS = ('True', 'true', 'T', 't', '1', 1)
+def boolish(x):
+    return x in ('True', 'true', 'T', 't', '1', 1)
 
 
 class NoDefaultValue:
@@ -71,16 +72,19 @@ PROJECT_ROOT = BASE_DIR.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'CHANGEME!!!'
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DJANGO_DEBUG', default=False, type_=lambda x: x in BOOLS)
+DEBUG = env('DJANGO_DEBUG', default=False, type_=boolish)
 
 MODE = env('DJANGO_MODE', default='dev' if DEBUG else 'prod')
 
 ALLOWED_HOSTS = [
+    '127.0.0.1',
+    '127.0.0.1:8000',
+    'localhost',
+    'localhost:8000',
+] + [
     el.strip()
     for el
     in env('DJANGO_ALLOWED_HOSTS', default=[], type_=lambda x: x.split(','))
@@ -98,6 +102,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
+    'allauth.socialaccount.providers.salesforce',
 ]
 
 MIDDLEWARE = [
@@ -137,7 +142,7 @@ WSGI_APPLICATION = '{{cookiecutter.project_slug}}.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://postgres/{{cookiecutter.project_slug}}',
+        default='postgres:///{{cookiecutter.project_slug}}',
     ),
 }
 

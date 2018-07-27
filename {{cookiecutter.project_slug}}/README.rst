@@ -1,21 +1,81 @@
 {{cookiecutter.project_name}}
 {{ '=' * cookiecutter.project_name|length }}
 
-Copy the ``.env`` file::
+Setup
+-----
 
-    mv env.example .env
+Cloning the project
+~~~~~~~~~~~~~~~~~~~
 
-You can also edit ``.env``, if you have any values that you know should
+Like so::
+
+   git clone git@github.com:salesforce/{{cookiecutter.project_slug}}.git
+   cd {{cookiecutter.project_slug}}
+
+Making a virtual env
+~~~~~~~~~~~~~~~~~~~~
+
+Assuming you use `Virtualenvwrapper`_, setup is pretty simple::
+
+   mkvirtualenv {{cookiecutter.project_slug}}
+   setvirtualenvproject
+
+Copy the ``.env`` file somewhere that will be sourced when you need it::
+
+    mv env.example $VIRTUAL_ENV/bin/postactivate
+
+You can also edit this file if you have any values that you know should
 be different.
 
-.. todo:: Set up database
-.. todo:: Set up message queue?
-.. todo:: Set up JS dependencies?
-.. todo:: Run DB migrations
-.. todo:: Set initial data
-.. todo:: Run worker process
-.. todo:: Run server process
+Now run ``workon {{cookiecutter.project_slug}}`` again to set those
+environment variables.
 
-Access the running server at http://localhost/ or
-http://{{ cookiecutter.domain_name }}.hexxie.com/ (these both point to
-127.0.0.1).
+Adapting this project to use `Pipenv`_ is left as an exercise to the
+reader.
+
+.. _Virtualenvwrapper: https://virtualenvwrapper.readthedocs.io/en/latest/
+.. _Pipenv: https://docs.pipenv.org/
+
+Setting up the database
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Assuming you have Postgres on your system::
+
+   createdb {{cookiecutter.project_slug}}
+
+Then run the initial migrations::
+
+   python src/manage.py migrate
+
+To make an initial user::
+
+   python src/manage.py createsuperuser
+
+Then follow the prompts.
+
+Setting up a message queue
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Just have Redis running locally.
+
+Running the service
+~~~~~~~~~~~~~~~~~~~
+
+There are two basic processes: the web and the worker. The web will
+handle web requests, the worker will handle longer-running background
+tasks. The two processes communicate through the message queue, and
+indirectly through the database.
+
+To run web in development::
+
+   python src/manage.py runserver
+
+To run worker in development::
+
+   celery -A {{cookiecutter.project_slug}} worker -l debug
+
+In production, the commands in the Procfile should suffice.
+
+.. todo:: Set up JS dependencies?
+
+Access the running server at `<http://localhost:8000/>`.
