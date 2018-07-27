@@ -4,3 +4,7 @@ dj-database-url
 whitenoise
 pytest
 Sphinx
+django-allauth
+django-extensions
+werkzeug
+pyopenssl
