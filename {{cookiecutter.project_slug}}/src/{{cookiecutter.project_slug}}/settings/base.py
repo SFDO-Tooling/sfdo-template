@@ -82,8 +82,10 @@ MODE = env('DJANGO_MODE', default='dev' if DEBUG else 'prod')
 ALLOWED_HOSTS = [
     '127.0.0.1',
     '127.0.0.1:8000',
+    '127.0.0.1:8080',
     'localhost',
     'localhost:8000',
+    'localhost:8080',
 ] + [
     el.strip()
     for el
@@ -126,7 +128,9 @@ ROOT_URLCONF = '{{cookiecutter.project_slug}}.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            PROJECT_ROOT / 'dist',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -206,8 +210,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+STATICFILES_DIRS = [
+    PROJECT_ROOT / 'dist',
+]
 STATIC_URL = '/static/'
-STATIC_ROOT = PROJECT_ROOT.joinpath('staticfiles')
+STATIC_ROOT = PROJECT_ROOT / 'staticfiles'
 
 # if MODE == 'dev':
 #     static_dir_root = 'static/dist'
