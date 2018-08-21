@@ -1,7 +1,18 @@
-<!DOCTYPE html>
-<html>
-  <head></head>
+{% raw %}<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    {% block robots %}<meta name="robots" content="index, follow" />{% endblock %}
+    <meta name="author" content="Salesforce.org" />
+    <meta name="keywords" content="{% block keywords %}{% endblock keywords %}" />
+    <meta name="language" content="en-us" />
+
+    <!-- Page Info -->
+    <title>{% block title %}{% endraw %}{{config.project_title}}{% raw %}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{% endblock description %}" />
+  </head>
   <body>
-    <main id="app"></main>
+    <main id="app"{% if user.is_authenticated %} data-username="{{ user.get_username }}"{% endif %}>Loading...</main>
   </body>
-</html>
+</html>{% endraw %}

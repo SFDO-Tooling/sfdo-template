@@ -13,10 +13,10 @@ const path = require('path');
 module.exports = {
   context: path.join(__dirname, 'src', 'js'),
   entry: {
-    app: ['./index.js', 'app.scss'],
+    app: ['whatwg-fetch', './index.js', 'app.scss'],
   },
   resolve: {
-    modules: ['src/js', 'src/sass', 'node_modules'],
+    modules: ['src/js', 'src/sass', 'static', 'node_modules'],
     extensions: ['.js', '.jsx'],
   },
   output: {
