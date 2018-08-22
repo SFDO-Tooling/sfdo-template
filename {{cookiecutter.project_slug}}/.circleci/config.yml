@@ -1,39 +1,134 @@
 version: 2
 jobs:
+
   build:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: python:3.7.0
-        environment:
-          DJANGO_SECRET_KEY: test-secret-key
-          DJANGO_DEBUG: False
-          DJANGO_SETTINGS_MODULE: {{cookiecutter.project_slug}}.settings.test
-          PYTHONPATH: src
-          DATABASE_URL: postgresql://ubuntu@localhost/circle_test
-          HASHID_FIELD_SALT: test-hash-salt
-      - image: postgres:10.4
-        environment:
-          POSTGRES_USER: ubuntu
-          POSTGRES_DB: circle_test
-          POSTGRES_PASSWORD: ""
+      - image: circleci/python:3.6.5
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
+            - v1-{{cookiecutter.project_slug}}-py-
+      - restore_cache:
+          keys:
+            - v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+            - v1-{{cookiecutter.project_slug}}-npm-
+      - run:
+          name: Install Node & Yarn
+          command: ./bin/unpack-node
+      - run:
+          name: Set $PATH
+          command: |
+            echo 'export PATH=~/{{cookiecutter.project_slug}}/node_modules/.bin:$PATH' >> $BASH_ENV
+            echo 'export PATH=~/{{cookiecutter.project_slug}}/node/bin:$PATH' >> $BASH_ENV
+      - run:
+          name: Update yarn.lock [greenkeeper]
+          command: |
+            if [[ "${CIRCLE_BRANCH}" =~ greenkeeper\/.* ]]; then
+              yarn global add greenkeeper-lockfile@1 --prefix ~/{{cookiecutter.project_slug}}/node
+              greenkeeper-lockfile-update
+            fi
       - run:
           name: Install Dependencies
           command: |
-            export PATH=~/{{cookiecutter.project_slug}}/node/bin:$PATH
-            pip install -r requirements.txt
+            yarn
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements/local.txt
       - run:
-          name: Run Database Migrations
-          command: python src/manage.py migrate --no-input
+          name: Upload yarn.lock [greenkeeper]
+          command: |
+            if [[ "${CIRCLE_BRANCH}" =~ greenkeeper\/.* ]]; then
+              greenkeeper-lockfile-upload
+            fi
       - run:
-          name: Lint Python
-          command: flake8 src/
+          name: Check that yarn.lock matches package.json
+          command: |
+            if [[ ! "${CIRCLE_BRANCH}" =~ greenkeeper\/.* ]]; then
+              [[ $(git diff --name-only yarn.lock) == "" ]] && exit 0
+              echo ">> yarn.lock is out of date, run \"yarn\""
+              exit 1
+            fi
       - run:
-          name: Test Python
-          command: py.test --junitxml=pycov/pytest-junit.xml
+          name: Compile Front-End Assets
+          command: yarn prod
+      - save_cache:
+          key: v1-{{cookiecutter.project_slug}}-node-{% raw %}{{ checksum "bin/unpack-node" }}{% endraw %}
+          paths:
+            - "~/{{cookiecutter.project_slug}}/node"
+      - save_cache:
+          key: v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
+          paths:
+            - "~/.cache/pip"
+            - ./venv
+      - save_cache:
+          key: v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+          paths:
+            - "~/.cache/yarn"
+            - "~/{{cookiecutter.project_slug}}/node_modules"
+
+  lint:
+    working_directory: ~/{{cookiecutter.project_slug}}
+    docker:
+      - image: circleci/python:3.6.5
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-{{cookiecutter.project_slug}}-node-{% raw %}{{ checksum "bin/unpack-node" }}{% endraw %}
+      - restore_cache:
+          key: v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
+      - restore_cache:
+          key: v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+      - run:
+          name: Set $PATH
+          command: |
+            echo 'export PATH=~/{{cookiecutter.project_slug}}/node_modules/.bin:$PATH' >> $BASH_ENV
+            echo 'export PATH=~/{{cookiecutter.project_slug}}/node/bin:$PATH' >> $BASH_ENV
+      - run:
+          name: Lint
+          command: |
+            . venv/bin/activate
+            yarn lint
+
+  test-client:
+    working_directory: ~/{{cookiecutter.project_slug}}
+    docker:
+      - image: circleci/python:3.6.5
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-{{cookiecutter.project_slug}}-node-{% raw %}{{ checksum "bin/unpack-node" }}{% endraw %}
+      - restore_cache:
+          key: v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+      - run:
+          name: Set $PATH
+          command: |
+            echo 'export PATH=~/{{cookiecutter.project_slug}}/node_modules/.bin:$PATH' >> $BASH_ENV
+            echo 'export PATH=~/{{cookiecutter.project_slug}}/node/bin:$PATH' >> $BASH_ENV
+      - run:
+          name: Test JS
+          command: yarn test:coverage
+      - run:
+          name: Check JS Test Coverage
+          command: |
+            yarn test:report-coverage
+            yarn test:check-coverage
       - store_artifacts:
-          path: htmlcov
-          destination: py-reports
+          path: coverage
+          destination: js-reports
       - store_test_results:
-          path: pycov
+          path: coverage
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build
+      - lint:
+          requires:
+            - build
+      - test-client:
+          requires:
+            - build
