@@ -2,6 +2,3 @@
 update: all
 schedule: every week
 label_prs: update
-assignees:
-  - wlonk
-  - jgerigmeyer

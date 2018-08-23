@@ -7,6 +7,6 @@ If you need to, install ``cookiecutter`` globally::
 
 Copy the project with ``cookiecutter``::
 
-    cookiecutter gh:oddbird/sfdo-template
+    cookiecutter gh:SFDO-Tooling/sfdo-template
     # Answer prompts
     cd <new-project>

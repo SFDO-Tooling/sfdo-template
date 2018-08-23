@@ -5,7 +5,7 @@
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
-    "url": "https://github.com/oddbird/{{cookiecutter.project_slug}}.git"
+    "url": "https://github.com/SFDO-Tooling/{{cookiecutter.project_slug}}.git"
   },
   "engines": {
     "node": "10.8.0",
