@@ -8,11 +8,11 @@ export const cache = getConfiguredCache({
 });
 
 const actionsToPersist = {
-  // ...
+  // ...see https://github.com/HenrikJoreteg/redux-persist-middleware
 };
 
 export const persistMiddleware = getPersistMiddleware({
   cacheFn: cache.set,
-  logger: console.info, // eslint-disable-line no-console
+  logger: window.console.info,
   actionMap: actionsToPersist,
 });

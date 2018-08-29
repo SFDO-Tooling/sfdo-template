@@ -1,0 +1,27 @@
+// @flow
+
+import { cache } from 'utils/caching';
+
+import type { ThunkAction } from 'redux-thunk';
+import type { User } from 'accounts/reducer';
+
+type LoginAction = { type: 'USER_LOGGED_IN', payload: User };
+type LogoutAction = { type: 'USER_LOGGED_OUT' };
+export type UserAction = LoginAction | LogoutAction;
+
+export const login = (payload: User): LoginAction => ({
+  type: 'USER_LOGGED_IN',
+  payload,
+});
+
+export const doLocalLogout = (): LogoutAction => {
+  cache.clear();
+  return {
+    type: 'USER_LOGGED_OUT',
+  };
+};
+
+export const logout = (): ThunkAction => (dispatch, getState, { apiFetch }) =>
+  apiFetch(window.api_urls.account_logout(), {
+    method: 'POST',
+  }).then(() => dispatch(doLocalLogout()));

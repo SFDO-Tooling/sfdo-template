@@ -16,8 +16,7 @@ import dj_database_url
 from django.core.exceptions import ImproperlyConfigured
 
 
-def boolish(x):
-    return x in ('True', 'true', 'T', 't', '1', 1)
+BOOLS = ('True', 'true', 'T', 't', '1', 1)
 
 
 class NoDefaultValue:
@@ -74,7 +73,7 @@ PROJECT_ROOT = Path(__file__).absolute().parent.parent.parent
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DJANGO_DEBUG', default=False, type_=boolish)
+DEBUG = env('DJANGO_DEBUG', default=False, type_=lambda x: x in BOOLS)
 
 MODE = env('DJANGO_MODE', default='dev' if DEBUG else 'prod')
 
@@ -88,7 +87,7 @@ ALLOWED_HOSTS = [
 ] + [
     el.strip()
     for el
-    in env('DJANGO_ALLOWED_HOSTS', default=[], type_=lambda x: x.split(','))
+    in env('DJANGO_ALLOWED_HOSTS', default='', type_=lambda x: x.split(','))
     if el.strip()
 ]
 
@@ -108,7 +107,11 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.salesforce',
+    'rest_framework',
+    '{{cookiecutter.project_slug}}',
+    '{{cookiecutter.project_slug}}.multisalesforce',
+    '{{cookiecutter.project_slug}}.api',
+    'django_js_reverse',
 ]
 
 MIDDLEWARE = [
@@ -128,7 +131,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            PROJECT_ROOT / 'dist',
+            str(PROJECT_ROOT / 'dist'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -231,3 +234,18 @@ STATIC_ROOT = str(PROJECT_ROOT / 'staticfiles')
 # This comes at a cost, though:
 # > you won't benefit from cache versioning
 # WHITENOISE_ROOT = PROJECT_ROOT.joinpath(static_dir_root)
+
+SOCIALACCOUNT_PROVIDERS = {
+    'salesforce-production': {
+        'SCOPE': ['web', 'full', 'refresh_token'],
+    },
+    'salesforce-test': {
+        'SCOPE': ['web', 'full', 'refresh_token'],
+    },
+}
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = False
+
+
+JS_REVERSE_JS_VAR_NAME = 'api_urls'
+JS_REVERSE_EXCLUDE_NAMESPACES = ['admin']

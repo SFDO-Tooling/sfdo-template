@@ -108,27 +108,29 @@ The WebSocket server (to live-reload on file changes) listens on
 Logging in with Salesforce
 --------------------------
 
-To make an initial local user::
+To setup the Salesforce OAuth integration, run the
+``populate_social_apps`` management command::
 
-   python manage.py createsuperuser
+   python manage.py populate_social_apps --prod-id XXX --prod-secret YYY
 
-To setup the Salesforce OAuth integration, add an entry in the database with
-configuration information. You can do this by filling in the form at
-`<https://localhost:8080/admin/socialaccount/socialapp/add/>`_ (you'll first be
-asked to log in using the local user you created above).
+You can also run it with ``--test-id`` and ``--test-secret``, or
+``--cust-id`` and ``--cust-secret``, or all three sets at once, to
+populate all three providers. The values to pass in with these flags can
+be found on the Connected App you've made in your Salesforce
+configuration.
 
-To fill this in, you'll need some specific values from a Connected App in your
-Salesforce configuration. If you're an OddBird, you can find these values in the
-shared Keybase team folder.
+Once you've logged in, you probably want to make your user a superuser.
+You can do that easily via the ``promote_superuser`` management
+command::
 
-If you don't have a Salesforce account, ask `Kit <mailto:kit@oddbird.net>`_ to
-send you an invitation by email.
+   python manage.py promote_superuser <your email>
 
 Development Tasks
 -----------------
 
 - ``yarn serve``: starts development server (with watcher) at
   `<https://localhost:8080/>`_ (assets are served from ``dist/`` dir)
+- ``yarn pytest``: run Python tests
 - ``yarn test``: run JS tests
 - ``yarn test:watch``: run JS tests with a watcher for development
 - ``yarn lint``: formats and lints ``.scss`` and ``.js`` files; lints ``.py``
