@@ -9,7 +9,7 @@ const Footer = (props: { logoSrc: string }) => (
   >
     <div
       className="footer-logo"
-      style={{ backgroundImage: `url(${props.logoSrc})` }}
+      style={% raw %}{{ backgroundImage: `url(${props.logoSrc})` }}{% endraw %}
       data-testid="footer-logo"
     />
     <div className="footer-item">
