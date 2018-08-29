@@ -33,27 +33,3 @@ declare module '@salesforce/design-system-react/components/page-header' {
 
   declare export default Component;
 }
-
-declare module '@salesforce/design-system-react/components/card' {
-  import typeof { Component } from 'react';
-
-  declare export default Component;
-}
-
-declare module '@salesforce/design-system-react/components/tabs' {
-  import typeof { Component } from 'react';
-
-  declare export default Component;
-}
-
-declare module '@salesforce/design-system-react/components/tabs/panel' {
-  import typeof { Component } from 'react';
-
-  declare export default Component;
-}
-
-declare module '@salesforce/design-system-react/components/icon' {
-  import typeof { Component } from 'react';
-
-  declare export default Component;
-}

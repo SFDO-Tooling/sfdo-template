@@ -32,13 +32,11 @@ Copy the ``.env`` file somewhere that will be sourced when you need it::
 
     cp env.example $VIRTUAL_ENV/bin/postactivate
 
-Edit this file to change ``DJANGO_SECRET_KEY`` to any arbitrary string value.
-
 Now run ``workon {{cookiecutter.project_slug}}`` again to set those environment variables.
 
 Your ``PATH`` (and environment variables) will be updated when you
 ``workon {{cookiecutter.project_slug}}`` and restored when you ``deactivate``. This will make sure
-that whenever you are working on MD, you use the MD-specific version of Node
+that whenever you are working on the project, you use the project-specific version of Node
 instead of any system-wide Node you may have.
 
 **All of the remaining steps assume that you have the virtualenv activated
@@ -65,7 +63,7 @@ To install the project-local version of Node (and `yarn`_)::
 
    bin/unpack-node
 
-If you can run ``which node`` and see a path inside your MD repo ending with
+If you can run ``which node`` and see a path inside your project directory ending with
 ``.../node/bin/node``, then you've got it set up right and can move on.
 
 Then use ``yarn`` to install dependencies::
