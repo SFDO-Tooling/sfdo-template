@@ -33,3 +33,19 @@ declare module '@salesforce/design-system-react/components/page-header' {
 
   declare export default Component;
 }
+
+declare module '@salesforce/design-system-react/components/input' {
+  import typeof { Component } from 'react';
+
+  declare export default Component;
+}
+
+declare module '@salesforce/design-system-react/components/menu-list/list' {
+  import typeof { Component } from 'react';
+
+  declare export default Component;
+}
+
+declare module '@salesforce/design-system-react/utilities/key-code' {
+  declare export default { [string]: number };
+}

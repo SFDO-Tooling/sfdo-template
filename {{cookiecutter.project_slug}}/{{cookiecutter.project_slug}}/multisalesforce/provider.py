@@ -24,7 +24,14 @@ class SalesforceTestProvider(PromptLoginMixin, SalesforceProvider):
     package = '{{cookiecutter.project_slug}}.multisalesforce'
 
 
+class SalesforceCustomProvider(PromptLoginMixin, SalesforceProvider):
+    id = 'salesforce-custom'
+    name = 'Salesforce Custom'
+    package = '{{cookiecutter.project_slug}}.multisalesforce'
+
+
 provider_classes = [
     SalesforceProductionProvider,
     SalesforceTestProvider,
+    SalesforceCustomProvider,
 ]
