@@ -1,1 +1,1 @@
-web: gunicorn {{cookiecutter.project_slug}}.wsgi:application --preload
+web: newrelic-admin run-program gunicorn {{cookiecutter.project_slug}}.wsgi:application --preload
