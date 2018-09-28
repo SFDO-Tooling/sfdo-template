@@ -37,22 +37,40 @@ const getApiFetch = (onAuthFailure: () => void) => (
   }
 
   return fetch(url, options)
-    .then(response => {
-      if (response.ok) {
-        return getResponse(response);
-      }
-      if (response.status === 401) {
-        onAuthFailure();
-        return getResponse(response);
-      }
-      const error = (new Error(response.statusText): { [string]: mixed });
-      error.response = response;
-      throw error;
-    })
+    .then(
+      response => {
+        if (response.ok) {
+          return getResponse(response);
+        }
+        if (response.status === 401) {
+          onAuthFailure();
+          return getResponse(response);
+        }
+        const error = (new Error(response.statusText): { [string]: mixed });
+        error.response = response;
+        throw error;
+      },
+      err => {
+        logError(err);
+        throw err;
+      },
+    )
     .catch(err => {
       logError(err);
       throw err;
     });
+};
+
+// Based on https://fetch.spec.whatwg.org/#fetch-api
+export const addUrlParams = (
+  baseUrl: string,
+  params: { [string]: string | number } = {},
+) => {
+  const url = new URL(baseUrl, window.location.origin);
+  Object.keys(params).forEach(key =>
+    url.searchParams.append(key, params[key].toString()),
+  );
+  return url.toString();
 };
 
 export default getApiFetch;

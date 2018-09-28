@@ -1,26 +1,32 @@
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import { fireEvent } from 'react-testing-library';
+import { render, fireEvent } from 'react-testing-library';
 
-import { renderWithRedux } from './../../utils';
+import { addUrlParams } from 'utils/api';
 
 import Login from 'components/header/login';
 
 describe('<Login />', () => {
-  test('updates `window.location.href` on login click', () => {
-    const initialState = { user: null };
-    const { getByText } = renderWithRedux(
-      <MemoryRouter>
-        <Login />
-      </MemoryRouter>,
-      initialState,
-    );
-    window.location.assign = jest.fn();
-    fireEvent.click(getByText('Log In'));
-    fireEvent.click(getByText('Sandbox or Scratch Org'));
-    const expected = window.api_urls.salesforce_test_login();
+  describe('login click', () => {
+    test('updates `window.location.href` on login click', () => {
+      const { getByText } = render(<Login />);
+      jest.spyOn(window.location, 'assign');
+      fireEvent.click(getByText('Log In'));
+      fireEvent.click(getByText('Sandbox or Scratch Org'));
+      const base = window.api_urls.salesforce_test_login();
+      const expected = addUrlParams(base, { next: window.location.pathname });
 
-    expect(window.location.assign).toHaveBeenCalledWith(expected);
+      expect(window.location.assign).toHaveBeenCalledWith(expected);
+    });
+  });
+
+  describe('custom domain click', () => {
+    test('opens modal', () => {
+      const { getByText, getByLabelText } = render(<Login />);
+      fireEvent.click(getByText('Log In'));
+      fireEvent.click(getByText('Use Custom Domain'));
+
+      expect(getByLabelText('Custom Domain')).toBeVisible();
+    });
   });
 
   describe('URLs not found', () => {
@@ -36,15 +42,14 @@ describe('<Login />', () => {
     });
 
     test('logs error to console', () => {
-      const initialState = { user: null };
-      renderWithRedux(
-        <MemoryRouter>
-          <Login />
-        </MemoryRouter>,
-        initialState,
-      );
+      const { getByText, queryByLabelText } = render(<Login />);
 
       expect(window.console.error).toHaveBeenCalled();
+
+      fireEvent.click(getByText('Log In'));
+      fireEvent.click(getByText('Use Custom Domain'));
+
+      expect(queryByLabelText('Custom Domain')).toBeNull();
     });
   });
 });

@@ -5,11 +5,12 @@ import * as ReactDOM from 'react-dom';
 import DocumentTitle from 'react-document-title';
 import IconSettings from '@salesforce/design-system-react/components/icon-settings';
 import logger from 'redux-logger';
+import settings from '@salesforce/design-system-react/components/settings';
 import thunk from 'redux-thunk';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { combineReducers, createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { createStore, applyMiddleware } from 'redux';
 
 import actionSprite from '@salesforce-ux/design-system/assets/icons/action-sprite/svg/symbols.svg';
 import customSprite from '@salesforce-ux/design-system/assets/icons/custom-sprite/svg/symbols.svg';
@@ -18,12 +19,16 @@ import standardSprite from '@salesforce-ux/design-system/assets/icons/standard-s
 import utilitySprite from '@salesforce-ux/design-system/assets/icons/utility-sprite/svg/symbols.svg';
 
 import getApiFetch from 'utils/api';
-import routes from 'utils/routes';
-import userReducer from 'accounts/reducer';
 import { cache, persistMiddleware } from 'utils/caching';
 import { logError } from 'utils/logging';
+import { routePatterns } from 'utils/routes';
+
+import reducer from 'app/reducer';
+
 import { login, doLocalLogout } from 'accounts/actions';
 
+import AuthError from 'components/authError';
+import ErrorBoundary from 'components/error';
 import Footer from 'components/footer';
 import FourOhFour from 'components/404';
 import Header from 'components/header';
@@ -31,7 +36,10 @@ import Header from 'components/header';
 const SF_logo = require('images/salesforce-logo.png');
 
 const Home = () => (
-  <div className="slds-text-longform">
+  <div
+    className="slds-text-longform
+      slds-p-around_x-large"
+  >
     <h1 className="slds-text-heading_large">
       Welcome to {{cookiecutter.project_name}}!
     </h1>
@@ -46,19 +54,22 @@ const App = () => (
         slds-grid_frame
         slds-grid_vertical"
     >
-      <Header />
-      <div
-        className="slds-grow
-          slds-shrink-none
-          slds-p-horizontal_medium
-          slds-p-vertical_large"
-      >
-        <Switch>
-          <Route exact path={routes.home()} component={Home} />
-          <Route component={FourOhFour} />
-        </Switch>
-      </div>
-      <Footer logoSrc={SF_logo} />
+      <ErrorBoundary>
+        <Header />
+        <div
+          className="slds-grow
+            slds-shrink-none"
+        >
+          <ErrorBoundary>
+            <Switch>
+              <Route exact path={routePatterns.home()} component={Home} />
+              <Route path={routePatterns.auth_error()} component={AuthError} />
+              <Route component={FourOhFour} />
+            </Switch>
+          </ErrorBoundary>
+        </div>
+        <Footer logoSrc={SF_logo} />
+      </ErrorBoundary>
     </div>
   </DocumentTitle>
 );
@@ -70,9 +81,7 @@ cache
     if (el) {
       // Create store
       const appStore = createStore(
-        combineReducers({
-          user: userReducer,
-        }),
+        reducer,
         data,
         composeWithDevTools(
           applyMiddleware(
@@ -102,6 +111,9 @@ cache
         }
       }
       el.removeAttribute('data-user');
+
+      // Set App element (used for react-SLDS modals)
+      settings.setAppElement(el);
 
       ReactDOM.render(
         <Provider store={appStore}>
