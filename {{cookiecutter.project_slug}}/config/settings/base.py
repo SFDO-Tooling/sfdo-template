@@ -175,6 +175,9 @@ DATABASES = {
     ),
 }
 
+# Custom User model:
+AUTH_USER_MODEL = 'api.User'
+
 
 # URL configuration:
 ROOT_URLCONF = '{{cookiecutter.project_slug}}.urls'
