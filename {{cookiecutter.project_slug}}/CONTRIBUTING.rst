@@ -6,8 +6,8 @@ Cloning the project
 
 ::
 
-   git clone git@github.com:SFDO-Tooling/{{cookiecutter.project_slug}}
-   cd {{cookiecutter.project_slug}}
+    git clone git@github.com:SFDO-Tooling/{{cookiecutter.project_slug}}
+    cd {{cookiecutter.project_slug}}
 
 Making a virtual env
 --------------------
@@ -31,6 +31,12 @@ create a virtualenv (once you have `virtualenvwrapper`_ installed locally)::
 Copy the ``.env`` file somewhere that will be sourced when you need it::
 
     cp env.example $VIRTUAL_ENV/bin/postactivate
+
+Edit this file to add the following environment variables::
+
+    export BUCKETEER_AWS_ACCESS_KEY_ID=...
+    export BUCKETEER_AWS_SECRET_ACCESS_KEY=...
+    export BUCKETEER_BUCKET_NAME=...
 
 Now run ``workon {{cookiecutter.project_slug}}`` again to set those environment variables.
 
@@ -61,14 +67,14 @@ Node versions).
 
 To install the project-local version of Node (and `yarn`_)::
 
-   bin/unpack-node
+    bin/unpack-node
 
 If you can run ``which node`` and see a path inside your project directory ending with
 ``.../node/bin/node``, then you've got it set up right and can move on.
 
 Then use ``yarn`` to install dependencies::
 
-   yarn
+    yarn
 
 .. _Node.js: http://nodejs.org
 .. _yarn: https://yarnpkg.com/
@@ -79,18 +85,18 @@ Setting up the database
 Assuming you have `Postgres <https://www.postgresql.org/download/>`_ installed
 and running locally::
 
-   createdb {{cookiecutter.project_slug}}
+    createdb {{cookiecutter.project_slug}}
 
 Then run the initial migrations::
 
-   python manage.py migrate
+    python manage.py migrate
 
 Running the server
 ------------------
 
 To run the local development server::
 
-   yarn serve
+    yarn serve
 
 The running server will be available at `<https://localhost:8080/>`_.
 
@@ -106,22 +112,21 @@ The WebSocket server (to live-reload on file changes) listens on
 Logging in with Salesforce
 --------------------------
 
-To setup the Salesforce OAuth integration, run the
-``populate_social_apps`` management command::
+To setup the Salesforce OAuth integration, run the ``populate_social_apps``
+management command. The values to use in place of the ``XXX` and ``YYY`` flags
+can be found on the Connected App you've made in your Salesforce configuration::
 
-   python manage.py populate_social_apps --prod-id XXX --prod-secret YYY
+    python manage.py populate_social_apps --prod-id XXX --prod-secret YYY
 
 You can also run it with ``--test-id`` and ``--test-secret``, or
 ``--cust-id`` and ``--cust-secret``, or all three sets at once, to
-populate all three providers. The values to pass in with these flags can
-be found on the Connected App you've made in your Salesforce
-configuration.
+populate all three providers.
 
 Once you've logged in, you probably want to make your user a superuser.
 You can do that easily via the ``promote_superuser`` management
 command::
 
-   python manage.py promote_superuser <your email>
+    python manage.py promote_superuser <your email>
 
 Development Tasks
 -----------------

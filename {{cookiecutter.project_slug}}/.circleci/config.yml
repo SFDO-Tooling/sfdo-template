@@ -23,11 +23,12 @@ jobs:
           command: |
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node_modules/.bin:$PATH' >> $BASH_ENV
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node/bin:$PATH' >> $BASH_ENV
+            source $BASH_ENV
       - run:
           name: Update yarn.lock [greenkeeper]
           command: |
             if [[ "${CIRCLE_BRANCH}" =~ greenkeeper\/.* ]]; then
-              yarn global add greenkeeper-lockfile@1 --prefix ~/{{cookiecutter.project_slug}}/node
+              yarn global add greenkeeper-lockfile@2 --prefix ~/{{cookiecutter.project_slug}}/node
               greenkeeper-lockfile-update
             fi
       - run:
@@ -80,12 +81,15 @@ jobs:
       - restore_cache:
           key: v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
       - restore_cache:
-          key: v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+          keys:
+            - v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+            - v1-{{cookiecutter.project_slug}}-npm-
       - run:
           name: Set $PATH
           command: |
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node_modules/.bin:$PATH' >> $BASH_ENV
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node/bin:$PATH' >> $BASH_ENV
+            source $BASH_ENV
       - run:
           name: Lint
           command: |
@@ -101,25 +105,27 @@ jobs:
       - restore_cache:
           key: v1-{{cookiecutter.project_slug}}-node-{% raw %}{{ checksum "bin/unpack-node" }}{% endraw %}
       - restore_cache:
-          key: v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+          keys:
+            - v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+            - v1-{{cookiecutter.project_slug}}-npm-
       - run:
           name: Set $PATH
           command: |
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node_modules/.bin:$PATH' >> $BASH_ENV
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node/bin:$PATH' >> $BASH_ENV
+            source $BASH_ENV
       - run:
           name: Test JS
           command: yarn test:coverage
-      - run:
-          name: Check JS Test Coverage
-          command: |
-            yarn test:report-coverage
-            yarn test:check-coverage
       - store_artifacts:
           path: coverage
           destination: js-reports
       - store_test_results:
           path: coverage
+      - persist_to_workspace:
+          root: .
+          paths:
+            - coverage
 
   test-python:
     working_directory: ~/{{cookiecutter.project_slug}}
@@ -135,6 +141,14 @@ jobs:
       - restore_cache:
           key: v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
       - run:
+          name: Install Dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.6.1
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
           name: Run Database Migrations
           command: |
             . venv/bin/activate
@@ -149,6 +163,46 @@ jobs:
           destination: py-reports
       - store_test_results:
           path: pycov
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .coverage
+
+  report-test-coverage:
+    working_directory: ~/{{cookiecutter.project_slug}}
+    docker:
+      - image: circleci/python:3.6.6
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - restore_cache:
+          key: v1-{{cookiecutter.project_slug}}-node-{% raw %}{{ checksum "bin/unpack-node" }}{% endraw %}
+      - restore_cache:
+          keys:
+            - v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+            - v1-{{cookiecutter.project_slug}}-npm-
+      - restore_cache:
+          key: v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
+      - run:
+          name: Set $PATH
+          command: |
+            echo 'export PATH=~/{{cookiecutter.project_slug}}/node_modules/.bin:$PATH' >> $BASH_ENV
+            echo 'export PATH=~/{{cookiecutter.project_slug}}/node/bin:$PATH' >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: Report Test Coverage
+          command: |
+            . venv/bin/activate
+            yarn pytest:report-coverage
+            yarn test:report-coverage
+            curl -k "https://coveralls.io/webhook?repo_token=${COVERALLS_REPO_TOKEN}" -d "payload[build_num]=${CIRCLE_BUILD_NUM}&payload[status]=done"
+      - run:
+          name: Check Test Coverage
+          command: |
+            . venv/bin/activate
+            yarn pytest:check-coverage
+            yarn test:check-coverage
 
 workflows:
   version: 2
@@ -164,3 +218,7 @@ workflows:
       - test-python:
           requires:
             - build
+      - report-test-coverage:
+          requires:
+            - test-client
+            - test-python
