@@ -23,11 +23,12 @@ jobs:
           command: |
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node_modules/.bin:$PATH' >> $BASH_ENV
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node/bin:$PATH' >> $BASH_ENV
+            source $BASH_ENV
       - run:
           name: Update yarn.lock [greenkeeper]
           command: |
             if [[ "${CIRCLE_BRANCH}" =~ greenkeeper\/.* ]]; then
-              yarn global add greenkeeper-lockfile@1 --prefix ~/{{cookiecutter.project_slug}}/node
+              yarn global add greenkeeper-lockfile@2 --prefix ~/{{cookiecutter.project_slug}}/node
               greenkeeper-lockfile-update
             fi
       - run:
@@ -80,12 +81,15 @@ jobs:
       - restore_cache:
           key: v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
       - restore_cache:
-          key: v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+          keys:
+            - v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+            - v1-{{cookiecutter.project_slug}}-npm-
       - run:
           name: Set $PATH
           command: |
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node_modules/.bin:$PATH' >> $BASH_ENV
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node/bin:$PATH' >> $BASH_ENV
+            source $BASH_ENV
       - run:
           name: Lint
           command: |
@@ -101,12 +105,15 @@ jobs:
       - restore_cache:
           key: v1-{{cookiecutter.project_slug}}-node-{% raw %}{{ checksum "bin/unpack-node" }}{% endraw %}
       - restore_cache:
-          key: v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+          keys:
+            - v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+            - v1-{{cookiecutter.project_slug}}-npm-
       - run:
           name: Set $PATH
           command: |
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node_modules/.bin:$PATH' >> $BASH_ENV
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node/bin:$PATH' >> $BASH_ENV
+            source $BASH_ENV
       - run:
           name: Test JS
           command: yarn test:coverage
@@ -134,15 +141,13 @@ jobs:
       - restore_cache:
           key: v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
       - run:
-          name: Wait for postgres server
-          command: |
-            for i in `seq 1 10`;
-            do
-              nc -z localhost 5432 && echo Success && exit 0
-              echo -n .
-              sleep 1
-            done
-            echo Failed waiting for Postgres && exit 1
+          name: Install Dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.6.1
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: Run Database Migrations
           command: |
@@ -174,7 +179,9 @@ jobs:
       - restore_cache:
           key: v1-{{cookiecutter.project_slug}}-node-{% raw %}{{ checksum "bin/unpack-node" }}{% endraw %}
       - restore_cache:
-          key: v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+          keys:
+            - v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
+            - v1-{{cookiecutter.project_slug}}-npm-
       - restore_cache:
           key: v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
       - run:
@@ -182,6 +189,7 @@ jobs:
           command: |
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node_modules/.bin:$PATH' >> $BASH_ENV
             echo 'export PATH=~/{{cookiecutter.project_slug}}/node/bin:$PATH' >> $BASH_ENV
+            source $BASH_ENV
       - run:
           name: Report Test Coverage
           command: |
