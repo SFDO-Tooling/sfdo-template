@@ -336,6 +336,9 @@ RQ_QUEUES = {
         'DEFAULT_TIMEOUT': 10,
     },
 }
+RQ = {
+    'WORKER_CLASS': '{{cookiecutter.project_slug}}.rq_worker.ConnectionClosingWorker',
+}
 
 
 # Logging
