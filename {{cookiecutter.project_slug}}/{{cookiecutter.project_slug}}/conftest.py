@@ -27,8 +27,8 @@ class SocialTokenFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = SocialToken
 
-    token = factory.Sequence('0123456789abcdef{}'.format)
-    token_secret = factory.Sequence('secret.0123456789abcdef{}'.format)
+    token = '0123456789abcdef'
+    token_secret = 'secret.0123456789abcdef'
     app = factory.SubFactory(SocialAppFactory)
 
 
