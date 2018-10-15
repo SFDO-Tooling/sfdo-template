@@ -5,6 +5,14 @@ import * as sockets from 'utils/websockets';
 jest.mock('sockette');
 
 describe('getAction', () => {
+  // test('handles MY_ACTION_TYPE msg', () => {
+  //   const msg = { type: 'MY_ACTION_TYPE' };
+  //   const expected = myActionCreator();
+  //   const actual = sockets.getAction(msg);
+
+  //   expect(actual).toEqual(expected);
+  // });
+
   test('handles unknown msg', () => {
     const msg = { foo: 'bar' };
     const expected = null;
