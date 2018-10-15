@@ -1,13 +1,13 @@
 import routes, { routePatterns } from 'utils/routes';
 
 describe('routes', () => {
-  [
-    { name: 'home', args: [], expected: '/' },
-  ].forEach(({ name, args, expected }) => {
-    test(`${name} returns path with args: ${args.join(', ')}`, () => {
-      expect(routes[name](...args)).toBe(expected);
-    });
-  });
+  [{ name: 'home', args: [], expected: '/' }].forEach(
+    ({ name, args, expected }) => {
+      test(`${name} returns path with args: ${args.join(', ')}`, () => {
+        expect(routes[name](...args)).toBe(expected);
+      });
+    },
+  );
 });
 
 describe('routePatterns', () => {

@@ -16,4 +16,4 @@ raven==6.9.0
 django-rq==1.2.0
 django-rq-scheduler==1.1.1
 django-storages==1.7.1
-boto3==1.9.18
+boto3==1.9.23

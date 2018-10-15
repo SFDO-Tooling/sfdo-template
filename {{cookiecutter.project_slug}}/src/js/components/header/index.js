@@ -34,7 +34,9 @@ const Header = ({
         <span>{{cookiecutter.project_name}}</span>
       </Link>
     }
-    navRight={user ? <Logout user={user} doLogout={doLogout} /> : <Login />}
+    navRight={
+      <>{user ? <Logout user={user} doLogout={doLogout} /> : <Login />}</>
+    }
     variant="objectHome"
   />
 );

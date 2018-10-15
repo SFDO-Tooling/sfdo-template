@@ -62,14 +62,14 @@ describe('createSocket', () => {
         );
       });
 
-      test('dispatches action', () => {
-        Sockette.mock.calls[0][1].onmessage({
-          data: { type: 'USER_TOKEN_INVALID' },
-        });
-        const expected = invalidateToken();
+      // test('dispatches action', () => {
+      //   Sockette.mock.calls[0][1].onmessage({
+      //     data: { type: 'MY_ACTION_TYPE' },
+      //   });
+      //   const expected = myActionCreator();
 
-        expect(dispatch).toHaveBeenCalledWith(expected);
-      });
+      //   expect(dispatch).toHaveBeenCalledWith(expected);
+      // });
     });
 
     describe('onreconnect', () => {

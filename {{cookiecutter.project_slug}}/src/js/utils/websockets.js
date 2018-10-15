@@ -11,11 +11,12 @@ export const getAction = (
     [string]: mixed,
   } = {},
 ): null => {
-  // switch (msg.type) {
-  //   case 'MY_ACTION_TYPE':
-  //     return myActionCreator();
-  // }
-  return null;
+  switch (msg.type) {
+    // case 'MY_ACTION_TYPE':
+    //   return myActionCreator();
+    default:
+      return null;
+  }
 };
 
 export const createSocket = ({
@@ -55,6 +56,7 @@ export const createSocket = ({
       }
       log('[WebSocket] received:', msg);
       const action = getAction(msg);
+      /* istanbul ignore if */
       if (action) {
         dispatch(action);
       }
