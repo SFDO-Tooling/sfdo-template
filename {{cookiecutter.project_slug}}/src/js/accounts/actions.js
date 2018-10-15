@@ -21,6 +21,10 @@ export const login = (payload: User): LoginAction => {
 
 export const doLocalLogout = (): LogoutAction => {
   cache.clear();
+  if (window.socket) {
+    window.socket.close(1000, 'user logged out');
+    Reflect.deleteProperty(window, 'socket');
+  }
   if (window.Raven && window.Raven.isSetup()) {
     window.Raven.setUserContext();
   }

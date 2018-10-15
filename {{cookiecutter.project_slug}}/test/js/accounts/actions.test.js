@@ -19,6 +19,15 @@ describe('login', () => {
     expect(actions.login(user)).toEqual(expected);
   });
 
+  test('closes socket', () => {
+    const close = jest.fn();
+    window.socket = { close };
+    actions.doLocalLogout();
+
+    expect(close).toHaveBeenCalled();
+    expect(window).not.toHaveProperty('socket');
+  });
+
   describe('with Raven', () => {
     beforeEach(() => {
       window.Raven = {

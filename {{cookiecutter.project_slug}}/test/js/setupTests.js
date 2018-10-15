@@ -11,4 +11,5 @@ beforeAll(() => {
   };
   window.console.error = jest.fn();
   window.console.warn = jest.fn();
+  window.console.info = jest.fn();
 });
