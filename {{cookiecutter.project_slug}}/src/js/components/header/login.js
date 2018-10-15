@@ -62,6 +62,9 @@ class Login extends React.Component<{}, { modalOpen: boolean }> {
           buttonVariant="brand"
           menuPosition="relative"
           nubbinPosition="top right"
+          iconCategory="utility"
+          iconName="down"
+          iconPosition="right"
           options={menuOpts}
           onSelect={opt => {
             if (opt.modal) {

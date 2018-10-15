@@ -1,3 +1,3 @@
-web: newrelic-admin run-program gunicorn {{cookiecutter.project_slug}}.wsgi:application --preload
+web: newrelic-admin run-program daphne --bind 0.0.0.0 --port $PORT {{cookiecutter.project_slug}}.asgi:application
 worker: newrelic-admin run-python manage.py rqworker default short
 scheduler: newrelic-admin run-python manage.py rqscheduler default short

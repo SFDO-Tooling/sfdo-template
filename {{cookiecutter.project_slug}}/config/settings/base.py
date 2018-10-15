@@ -105,7 +105,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django_extensions',
+    'channels',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'django_rq',
@@ -161,7 +161,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-WSGI_APPLICATION = '{{cookiecutter.project_slug}}.wsgi.application'
+ASGI_APPLICATION = '{{cookiecutter.project_slug}}.routing.application'
 
 SITE_ID = 1
 
@@ -338,6 +338,14 @@ RQ_QUEUES = {
 }
 RQ = {
     'WORKER_CLASS': '{{cookiecutter.project_slug}}.rq_worker.ConnectionClosingWorker',
+}
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [REDIS_LOCATION],
+        },
+    },
 }
 
 
