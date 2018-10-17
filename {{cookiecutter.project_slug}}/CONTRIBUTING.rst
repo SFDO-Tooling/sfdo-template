@@ -6,7 +6,7 @@ Cloning the project
 
 ::
 
-    git clone git@github.com:SFDO-Tooling/{{cookiecutter.project_slug}}
+    git clone git@github.com:{{cookiecutter.github_username}}/{{cookiecutter.project_slug}}
     cd {{cookiecutter.project_slug}}
 
 Making a virtual env

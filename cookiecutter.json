@@ -1,6 +1,7 @@
 {
     "project_name": "Project Name",
     "project_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '_')|replace('-', '_') }}",
+    "github_username": "SFDO-Tooling",
     "author_name": "Salesforce.org",
     "email": "contact@salesforce.org",
     "description": "A short description of the project.",
