@@ -7,13 +7,13 @@
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     {% block robots %}<meta name="robots" content="index, follow" />{% endblock %}
-    <meta name="author" content="Salesforce.org" />
+    <meta name="author" content="{% endraw %}{{cookiecutter.author_name}}{% raw %}" />
     <meta name="keywords" content="{% block keywords %}{% endblock keywords %}" />
     <meta name="language" content="en-us" />
 
     <!-- Page Info -->
     <title>{% block title %}{% endraw %}{{cookiecutter.project_name}}{% raw %}{% endblock %}</title>
-    <meta name="description" content="{% block description %}{% endblock description %}" />
+    <meta name="description" content="{% block description %}{% endraw %}{{cookiecutter.description}}{% raw %}{% endblock description %}" />
 
     <!-- Styles -->
     <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.vendors.css[0] %>" type="text/css">

@@ -25,7 +25,7 @@ const Footer = (props: { logoSrc: string }) => (
       className="footer-item
         slds-grid"
     >
-      <p>Copyright 2000–2018 Salesforce.org. All rights reserved.</p>
+      <p>Copyright {% now 'utc', '%Y' %} {{cookiecutter.author_name}}. All rights reserved.</p>
     </div>
   </footer>
 );
