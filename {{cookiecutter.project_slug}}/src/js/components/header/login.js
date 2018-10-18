@@ -59,7 +59,8 @@ class Login extends React.Component<{}, { modalOpen: boolean }> {
           label="Log In"
           className="slds-dropdown_actions
             slds-dropdown_medium"
-          buttonVariant="brand"
+          buttonClassName="slds-button_outline-brand"
+          buttonVariant="base"
           menuPosition="relative"
           nubbinPosition="top right"
           iconCategory="utility"

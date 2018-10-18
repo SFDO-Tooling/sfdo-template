@@ -26,10 +26,6 @@
       "quantity": 1,
       "size": "free"
     },
-    "scheduler": {
-      "quantity": 1,
-      "size": "free"
-    },
     "worker": {
       "quantity": 1,
       "size": "free"
@@ -39,6 +35,7 @@
   "addons": [
     "heroku-postgresql",
     "heroku-redis",
+    "scheduler",
     "bucketeer",
     "newrelic"
   ],
