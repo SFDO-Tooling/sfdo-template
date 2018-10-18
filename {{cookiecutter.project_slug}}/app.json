@@ -26,8 +26,16 @@
       "quantity": 1,
       "size": "free"
     },
-    "worker": {
+    "dev_worker": {
       "quantity": 1,
+      "size": "free"
+    },
+    "worker": {
+      "quantity": 0,
+      "size": "free"
+    },
+    "scheduler": {
+      "quantity": 0,
       "size": "free"
     }
   },
@@ -35,9 +43,9 @@
   "addons": [
     "heroku-postgresql",
     "heroku-redis",
-    "scheduler",
     "bucketeer",
-    "newrelic"
+    "newrelic",
+    "sentry"
   ],
   "buildpacks": [
       {"url": "heroku/nodejs"},
@@ -54,5 +62,8 @@
         "DATABASE_URL": "sqlite:///test.db"
       }
     }
+  },
+  "scripts": {
+    "postdeploy": "python manage.py migrate --noinput"
   }
 }
