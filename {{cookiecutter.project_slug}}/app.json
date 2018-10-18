@@ -51,18 +51,6 @@
       {"url": "heroku/nodejs"},
       {"url": "heroku/python"}
   ],
-  "environments": {
-    "test": {
-      "scripts": {
-        "test-setup": "pip install --upgrade -r requirements/test.txt",
-        "test": "pytest"
-      },
-      "env": {
-        "DJANGO_SETTINGS_MODULE": "config.settings.test",
-        "DATABASE_URL": "sqlite:///test.db"
-      }
-    }
-  },
   "scripts": {
     "postdeploy": "python manage.py migrate --noinput"
   }
