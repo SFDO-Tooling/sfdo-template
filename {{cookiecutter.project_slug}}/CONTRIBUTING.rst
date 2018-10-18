@@ -38,9 +38,9 @@ Copy the ``.env`` file somewhere that will be sourced when you need it::
     export BUCKETEER_AWS_SECRET_ACCESS_KEY=...
     export BUCKETEER_BUCKET_NAME=...
 
-Now run ``workon {{cookiecutter.project_slug}}`` again to set those environment variables.
+{% endif %}Now run ``workon {{cookiecutter.project_slug}}`` again to set those environment variables.
 
-{% endif %}Your ``PATH`` (and environment variables) will be updated when you
+Your ``PATH`` (and environment variables) will be updated when you
 ``workon {{cookiecutter.project_slug}}`` and restored when you ``deactivate``. This will make sure
 that whenever you are working on the project, you use the project-specific version of Node
 instead of any system-wide Node you may have.
