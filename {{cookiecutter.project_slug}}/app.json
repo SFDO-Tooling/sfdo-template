@@ -42,8 +42,8 @@
   "image": "heroku/python",
   "addons": [
     "heroku-postgresql",
-    "heroku-redis",
-    "bucketeer",
+    "heroku-redis",{% if cookiecutter.use_bucketeer_aws_for_file_storage == 'y' %}
+    "bucketeer",{% endif %}
     "newrelic",
     "sentry"
   ],

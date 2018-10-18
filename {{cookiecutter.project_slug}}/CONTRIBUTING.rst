@@ -32,7 +32,7 @@ Copy the ``.env`` file somewhere that will be sourced when you need it::
 
     cp env.example $VIRTUAL_ENV/bin/postactivate
 
-Edit this file to add the following environment variables::
+{% if cookiecutter.use_bucketeer_aws_for_file_storage == 'y' %}Edit this file to add the following environment variables::
 
     export BUCKETEER_AWS_ACCESS_KEY_ID=...
     export BUCKETEER_AWS_SECRET_ACCESS_KEY=...
@@ -40,7 +40,7 @@ Edit this file to add the following environment variables::
 
 Now run ``workon {{cookiecutter.project_slug}}`` again to set those environment variables.
 
-Your ``PATH`` (and environment variables) will be updated when you
+{% endif %}Your ``PATH`` (and environment variables) will be updated when you
 ``workon {{cookiecutter.project_slug}}`` and restored when you ``deactivate``. This will make sure
 that whenever you are working on the project, you use the project-specific version of Node
 instead of any system-wide Node you may have.
