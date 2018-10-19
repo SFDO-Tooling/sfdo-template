@@ -1,11 +1,17 @@
 {
   "name": "{{cookiecutter.project_slug}}",
-  "version": "0.1.0",
+  "version": "{{cookiecutter.version}}",
+  "description": "{{cookiecutter.description}}",
+  "homepage": "{{cookiecutter.domain_name}}",
   "private": true,
-  "license": "BSD-3-Clause",
+  "license": "{{ 'UNLICENSED' if cookiecutter.open_source_license == 'Not open source' else cookiecutter.open_source_license }}",
+  "author": {
+    "name": "{{cookiecutter.author_name}}",
+    "email": "{{cookiecutter.email}}"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SFDO-Tooling/{{cookiecutter.project_slug}}.git"
+    "url": "https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.project_slug}}.git"
   },
   "engines": {
     "node": "10.12.0",

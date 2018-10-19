@@ -3,3 +3,4 @@
 
 -r base.txt
 newrelic==4.4.1.104
+honcho==1.0.1

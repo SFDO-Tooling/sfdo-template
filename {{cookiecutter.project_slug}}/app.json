@@ -1,7 +1,7 @@
 {
   "name": "{{cookiecutter.project_name}}",
-  "description": "The future, today.",
-  "repository": "https://github.com/SFDO-Tooling/{{cookiecutter.project_slug}}",
+  "description": "{{cookiecutter.description}}",
+  "repository": "https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.project_slug}}",
   "keywords": ["ci", "python", "django", "salesforce", "github"],
   "env": {
     "DJANGO_ALLOWED_HOSTS": {
@@ -25,26 +25,33 @@
     "web": {
       "quantity": 1,
       "size": "free"
+    },
+    "dev_worker": {
+      "quantity": 1,
+      "size": "free"
+    },
+    "worker": {
+      "quantity": 0,
+      "size": "free"
+    },
+    "scheduler": {
+      "quantity": 0,
+      "size": "free"
     }
   },
   "image": "heroku/python",
   "addons": [
-    "heroku-postgresql"
+    "heroku-postgresql",
+    "heroku-redis",{% if cookiecutter.use_bucketeer_aws_for_file_storage == 'y' %}
+    "bucketeer",{% endif %}
+    "newrelic",
+    "sentry"
   ],
   "buildpacks": [
-      {"url": "heroku/node"},
+      {"url": "heroku/nodejs"},
       {"url": "heroku/python"}
   ],
-  "environments": {
-    "test": {
-      "scripts": {
-        "test-setup": "pip install --upgrade -r requirements/test.txt",
-        "test": "pytest"
-      },
-      "env": {
-        "DJANGO_SETTINGS_MODULE": "config.settings.test",
-        "DATABASE_URL": "sqlite:///test.db"
-      }
-    }
+  "scripts": {
+    "postdeploy": "python manage.py migrate --noinput"
   }
 }

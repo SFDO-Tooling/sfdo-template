@@ -105,29 +105,21 @@ def remove_heroku_files():
 
 def remove_copying_files():
     """
-    Removes files needed for the GPLv3 licence if it isn't going to be used
+    Removes files needed for the GPLv3 license if it isn't going to be used
     """
     remove_files(["COPYING"])
 
 
-def remove_open_source_files():
-    """
-    Removes files conventional to opensource projects only.
-    """
-    remove_files(["CONTRIBUTORS.rst", "CONTRIBUTING.rst"])
-
-
-use_gplv3 = '{{ cookiecutter.open_source_license}}' == 'GPLv3'
+use_gplv3 = '{{ cookiecutter.open_source_license }}' == 'GPLv3'
 not_oss = '{{ cookiecutter.open_source_license }}' == 'Not open source'
 
 # 1. Generates and saves random secret key
 make_secret_key(PROJECT_DIRECTORY)
 
-# 2. Removes files needed for the GPLv3 licence if it isn't going to be used.
+# 2. Removes files needed for the GPLv3 license if it isn't going to be used.
 if not use_gplv3:
     remove_copying_files()
 
 # 3. Remove files conventional to opensource projects only.
 if not_oss:
     remove_copying_files()
-    remove_open_source_files()
