@@ -1,6 +1,7 @@
 import 'isomorphic-fetch';
 import 'jest-dom/extend-expect';
 import 'react-testing-library/cleanup-after-each';
+import fetchMock from 'fetch-mock';
 
 beforeAll(() => {
   window.api_urls = {
@@ -13,3 +14,5 @@ beforeAll(() => {
   window.console.warn = jest.fn();
   window.console.info = jest.fn();
 });
+
+afterEach(fetchMock.reset);
