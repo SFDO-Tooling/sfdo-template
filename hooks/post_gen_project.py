@@ -44,12 +44,12 @@ def get_random_string(length=50):
     print(
         "Cookiecutter Django couldn't find a secure pseudo-random number "
         "generator on your system. Please change change your SECRET_KEY "
-        "variables in conf/settings/local.py and env.example manually."
+        "and HASHID_SALT variables in env.example manually."
     )
-    return "CHANGEME!!"
+    return "CHANGEME!!!"
 
 
-def set_secret_key(setting_file_location):
+def set_secret_key(setting_file_location, str_to_replace):
     # Open settings
     with open(setting_file_location) as f:
         file_ = f.read()
@@ -57,32 +57,24 @@ def set_secret_key(setting_file_location):
     # Generate a SECRET_KEY that matches the Django standard
     SECRET_KEY = get_random_string()
 
-    # Replace "CHANGEME!!!" with SECRET_KEY
-    file_ = file_.replace('CHANGEME!!!', SECRET_KEY, 1)
+    # Replace string with SECRET_KEY
+    file_ = file_.replace(str_to_replace, SECRET_KEY, 1)
 
     # Write the results to the settings module
     with open(setting_file_location, 'w') as f:
         f.write(file_)
 
 
-def make_secret_key(project_directory):
+def make_secret_key(project_directory, strings_to_replace=[]):
     """Generates and saves random secret key"""
-    # Determine the local_setting_file_location
-    local_setting = os.path.join(
-        project_directory,
-        'config/settings/base.py'
-    )
-
-    # base.py settings file
-    set_secret_key(local_setting)
-
     env_file = os.path.join(
         project_directory,
         'env.example'
     )
 
     # env.example file
-    set_secret_key(env_file)
+    for string in strings_to_replace:
+        set_secret_key(env_file, string)
 
 
 def remove_file(file_name):
@@ -114,7 +106,7 @@ use_gplv3 = '{{ cookiecutter.open_source_license }}' == 'GPLv3'
 not_oss = '{{ cookiecutter.open_source_license }}' == 'Not open source'
 
 # 1. Generates and saves random secret key
-make_secret_key(PROJECT_DIRECTORY)
+make_secret_key(PROJECT_DIRECTORY, ['CHANGEME!!!', 'something long and random'])
 
 # 2. Removes files needed for the GPLv3 license if it isn't going to be used.
 if not use_gplv3:

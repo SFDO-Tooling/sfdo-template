@@ -75,6 +75,7 @@ PROJECT_ROOT = Path(__file__).absolute().parent.parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 SECRET_KEY = env('DJANGO_SECRET_KEY')
+HASHID_FIELD_SALT = env('DJANGO_HASHID_SALT')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DJANGO_DEBUG', default=False, type_=boolish)
@@ -273,10 +274,6 @@ STATICFILES_DIRS = [
 STATIC_URL = '/static/'
 STATIC_ROOT = str(PROJECT_ROOT / 'staticfiles')
 
-# if MODE == 'dev':
-#     static_dir_root = 'static/dist'
-# else:
-#     static_dir_root = 'static/dist/min'
 
 # Per the docs:
 # > Absolute path to a directory of files which will be served at the root of

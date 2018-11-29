@@ -1,5 +1,5 @@
 // flow-typed signature: ab5dcf325d82a5f5112b4788616b9471
-// flow-typed version: <<STUB>>/@salesforce/design-system-react_v^0.9.0/flow_v0.85.0
+// flow-typed version: <<STUB>>/@salesforce/design-system-react_v^0.9.0/flow_v0.87.0
 
 declare module '@salesforce/design-system-react/components/icon-settings' {
   import typeof { Component } from 'react';
@@ -44,6 +44,12 @@ declare module '@salesforce/design-system-react/components/input' {
 }
 
 declare module '@salesforce/design-system-react/components/modal' {
+  import typeof { Component } from 'react';
+
+  declare export default Component;
+}
+
+declare module '@salesforce/design-system-react/components/illustration' {
   import typeof { Component } from 'react';
 
   declare export default Component;
