@@ -20,7 +20,7 @@ export const withTransientMessage = function<
   Component: React.ComponentType<Props>,
 >(
   WrappedComponent: Component,
-  options?: { duration?: number },
+  options?: {| duration?: number |},
 ): Class<
   React.Component<$Diff<Props, TransientMessageProps>, TransientMessageState>,
 > {

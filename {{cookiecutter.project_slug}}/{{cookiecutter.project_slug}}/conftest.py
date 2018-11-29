@@ -60,5 +60,5 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 
 @pytest.fixture
-def anon_client():
+def anon_client():  # pragma: nocover
     return APIClient()
