@@ -1,7 +1,7 @@
 """
 Does the following:
 
-1. Removes files for OSS or the GPLv3 license if it isn't going to be used
+1. Removes files needed for the GPLv3 license if it isn't going to be used
 """
 import os
 
@@ -22,7 +22,7 @@ def remove_files(file_names):
 
 def remove_copying_files():
     """
-    Removes files for OSS or the GPLv3 license if it isn't going to be used
+    Removes files needed for the GPLv3 license if it isn't going to be used
     """
     remove_files(["COPYING"])
 
@@ -30,6 +30,6 @@ def remove_copying_files():
 use_gplv3 = '{{ cookiecutter.open_source_license }}' == 'GPLv3'
 not_oss = '{{ cookiecutter.open_source_license }}' == 'Not open source'
 
-# 1. Removes files for OSS or the GPLv3 license if it isn't going to be used.
-if not_oss and not use_gplv3:
+# 1. Removes files needed for the GPLv3 license if it isn't going to be used.
+if not use_gplv3:
     remove_copying_files()

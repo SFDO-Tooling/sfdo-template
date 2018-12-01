@@ -59,6 +59,6 @@ class UserFactory(factory.django.DjangoModelFactory):
     socialaccount_set = factory.RelatedFactory(SocialAccountFactory, 'user')
 
 
-@pytest.fixture
-def anon_client():  # pragma: nocover
-    return APIClient()
+# @pytest.fixture
+# def anon_client():
+#     return APIClient()
