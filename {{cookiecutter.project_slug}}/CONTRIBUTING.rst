@@ -32,13 +32,15 @@ Copy the ``.env`` file somewhere that will be sourced when you need it::
 
     cp env.example $VIRTUAL_ENV/bin/postactivate
 
-{% if cookiecutter.use_bucketeer_aws_for_file_storage == 'y' %}Edit this file to add the following environment variables::
+Edit this file to change ``DJANGO_SECRET_KEY`` and ``DJANGO_HASHID_SALT`` to any
+two different arbitrary string values.
+{%- if cookiecutter.use_bucketeer_aws_for_file_storage == 'y' %} Additionally, add the following environment variables::
 
     export BUCKETEER_AWS_ACCESS_KEY_ID=...
     export BUCKETEER_AWS_SECRET_ACCESS_KEY=...
-    export BUCKETEER_BUCKET_NAME=...
+    export BUCKETEER_BUCKET_NAME=...{% endif %}
 
-{% endif %}Now run ``workon {{cookiecutter.project_slug}}`` again to set those environment variables.
+Now run ``workon {{cookiecutter.project_slug}}`` again to set those environment variables.
 
 Your ``PATH`` (and environment variables) will be updated when you
 ``workon {{cookiecutter.project_slug}}`` and restored when you ``deactivate``. This will make sure

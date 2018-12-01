@@ -8,6 +8,15 @@ import { logError } from 'utils/logging';
 
 import CustomDomainModal from 'components/header/customDomainModal';
 
+type MenuOption =
+  | {|
+      label: string,
+      href?: string,
+      disabled: boolean,
+      modal?: boolean,
+    |}
+  | {| type: string |};
+
 class Login extends React.Component<{}, { modalOpen: boolean }> {
   constructor(props: {}) {
     super(props);
@@ -27,8 +36,20 @@ class Login extends React.Component<{}, { modalOpen: boolean }> {
     this.setState({ modalOpen: isOpen });
   };
 
-  render(): React.Node {
-    const menuOpts = [
+  handleSelect = (opt: MenuOption) => {
+    if (opt.modal) {
+      this.toggleModal(true);
+      return;
+    }
+    if (opt.href) {
+      window.location.assign(
+        addUrlParams(opt.href, { next: window.location.pathname }),
+      );
+    }
+  };
+
+  static getMenuOpts(): Array<MenuOption> {
+    return [
       {
         label: 'Production or Developer Org',
         href:
@@ -52,6 +73,10 @@ class Login extends React.Component<{}, { modalOpen: boolean }> {
         disabled: !window.api_urls.salesforce_custom_login,
       },
     ];
+  }
+
+  render(): React.Node {
+    const menuOpts = Login.getMenuOpts();
     return (
       <>
         <Dropdown
@@ -67,17 +92,7 @@ class Login extends React.Component<{}, { modalOpen: boolean }> {
           iconName="down"
           iconPosition="right"
           options={menuOpts}
-          onSelect={opt => {
-            if (opt.modal) {
-              this.toggleModal(true);
-              return;
-            }
-            if (opt.href) {
-              window.location.assign(
-                addUrlParams(opt.href, { next: window.location.pathname }),
-              );
-            }
-          }}
+          onSelect={this.handleSelect}
         />
         <CustomDomainModal
           isOpen={this.state.modalOpen}

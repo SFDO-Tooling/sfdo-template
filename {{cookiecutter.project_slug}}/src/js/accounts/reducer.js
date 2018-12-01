@@ -3,6 +3,7 @@
 import type { UserAction } from 'accounts/actions';
 
 export type User = {
+  +id: string,
   +username: string,
   +email: string,
 } | null;

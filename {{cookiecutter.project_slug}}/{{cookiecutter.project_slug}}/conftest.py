@@ -1,5 +1,7 @@
-import factory
 from pytest_factoryboy import register
+from rest_framework.test import APIClient
+import factory
+import pytest
 
 from django.contrib.auth import get_user_model
 
@@ -55,3 +57,8 @@ class UserFactory(factory.django.DjangoModelFactory):
     username = factory.Sequence("user_{}@example.com".format)
     password = factory.PostGenerationMethodCall('set_password', 'foobar')
     socialaccount_set = factory.RelatedFactory(SocialAccountFactory, 'user')
+
+
+# @pytest.fixture
+# def anon_client():
+#     return APIClient()
