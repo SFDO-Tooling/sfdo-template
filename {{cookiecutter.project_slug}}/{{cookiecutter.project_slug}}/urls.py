@@ -27,18 +27,18 @@ PREFIX = settings.ADMIN_AREA_PREFIX
 
 
 urlpatterns = [
-    path(urljoin(PREFIX, r'django-rq/'), include('django_rq.urls')),
+    path(urljoin(PREFIX, r"django-rq/"), include("django_rq.urls")),
     # Put this after all other things using `PREFIX`:
     path(PREFIX, admin.site.urls),
-    path('accounts/', include('allauth.urls')),
-    path('api/', include('{{cookiecutter.project_slug}}.api.urls')),
+    path("accounts/", include("allauth.urls")),
+    path("api/", include("{{cookiecutter.project_slug}}.api.urls")),
     # Catchall for the rest. Right now, it just trusts that PREFIX ==
     # 'admin/', because we don't want to do string munging to get just
     # the part without the regex and path cruft on it.
     re_path(
-        r'^(?!admin|accounts|api)',
-        TemplateView.as_view(template_name='index.html'),
-        name='frontend',
+        r"^(?!admin|accounts|api)",
+        TemplateView.as_view(template_name="index.html"),
+        name="frontend",
     ),
     # Add WebSocket routes so that non-HTTP paths can be accessible by
     # `reverse` in Python and `window.api_urls` in JavaScript. These will

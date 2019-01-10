@@ -16,7 +16,7 @@ import dj_database_url
 from django.core.exceptions import ImproperlyConfigured
 
 
-BOOLS = ('True', 'true', 'T', 't', '1', 1)
+BOOLS = ("True", "true", "T", "t", "1", 1)
 
 
 def boolish(val):
@@ -60,9 +60,7 @@ def env(name, default=NoDefaultValue, type_=str):
         val = environ[name]
     except KeyError:
         if default == NoDefaultValue:
-            raise ImproperlyConfigured(
-                f'Missing environment variable: {name}.'
-            )
+            raise ImproperlyConfigured(f"Missing environment variable: {name}.")
         val = default
     val = type_(val)
     return val
@@ -74,25 +72,24 @@ PROJECT_ROOT = Path(__file__).absolute().parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
-SECRET_KEY = env('DJANGO_SECRET_KEY')
-HASHID_FIELD_SALT = env('DJANGO_HASHID_SALT')
+SECRET_KEY = env("DJANGO_SECRET_KEY")
+HASHID_FIELD_SALT = env("DJANGO_HASHID_SALT")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DJANGO_DEBUG', default=False, type_=boolish)
+DEBUG = env("DJANGO_DEBUG", default=False, type_=boolish)
 
-MODE = env('DJANGO_MODE', default='dev' if DEBUG else 'prod')
+MODE = env("DJANGO_MODE", default="dev" if DEBUG else "prod")
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    '127.0.0.1:8000',
-    '127.0.0.1:8080',
-    'localhost',
-    'localhost:8000',
-    'localhost:8080',
+    "127.0.0.1",
+    "127.0.0.1:8000",
+    "127.0.0.1:8080",
+    "localhost",
+    "localhost:8000",
+    "localhost:8080",
 ] + [
     el.strip()
-    for el
-    in env('DJANGO_ALLOWED_HOSTS', default='', type_=lambda x: x.split(','))
+    for el in env("DJANGO_ALLOWED_HOSTS", default="", type_=lambda x: x.split(","))
     if el.strip()
 ]
 
@@ -100,69 +97,66 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.sites',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'channels',
-    'whitenoise.runserver_nostatic',
-    'django.contrib.staticfiles',
-    'django_rq',
-    'scheduler',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'rest_framework',
-    '{{cookiecutter.project_slug}}',
-    '{{cookiecutter.project_slug}}.multisalesforce',
-    '{{cookiecutter.project_slug}}.api',
-    'django_js_reverse',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.sites",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "channels",
+    "whitenoise.runserver_nostatic",
+    "django.contrib.staticfiles",
+    "django_rq",
+    "scheduler",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "rest_framework",
+    "{{cookiecutter.project_slug}}",
+    "{{cookiecutter.project_slug}}.multisalesforce",
+    "{{cookiecutter.project_slug}}.api",
+    "django_js_reverse",
 ]
 
 MIDDLEWARE = [
-    'log_request_id.middleware.RequestIDMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "log_request_id.middleware.RequestIDMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
         # This gets overridden in settings.production:
-        'DIRS': [
-            str(PROJECT_ROOT / 'dist'),
-            str(PROJECT_ROOT / 'templates'),
-        ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "DIRS": [str(PROJECT_ROOT / "dist"), str(PROJECT_ROOT / "templates")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
                 # `allauth` needs this from django:
-                'django.template.context_processors.request',
+                "django.template.context_processors.request",
                 # custom
-                '{{cookiecutter.project_slug}}.context_processors.env',
-            ],
+                "{{cookiecutter.project_slug}}.context_processors.env",
+            ]
         },
-    },
+    }
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-ASGI_APPLICATION = '{{cookiecutter.project_slug}}.routing.application'
+ASGI_APPLICATION = "{{cookiecutter.project_slug}}.routing.application"
 
 SITE_ID = 1
 
@@ -171,20 +165,20 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres:///{{cookiecutter.project_slug}}',
-    ),
+    "default": dj_database_url.config(
+        default="postgres:///{{cookiecutter.project_slug}}"
+    )
 }
 
 # Custom User model:
-AUTH_USER_MODEL = 'api.User'
+AUTH_USER_MODEL = "api.User"
 
 
 # URL configuration:
-ROOT_URLCONF = '{{cookiecutter.project_slug}}.urls'
+ROOT_URLCONF = "{{cookiecutter.project_slug}}.urls"
 
 # Must end in a /, or you will experience surprises:
-ADMIN_AREA_PREFIX = 'admin/'
+ADMIN_AREA_PREFIX = "admin/"
 
 
 # Password validation
@@ -192,63 +186,40 @@ ADMIN_AREA_PREFIX = 'admin/'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': (
-            'django.contrib.auth.password_validation.'
-            'UserAttributeSimilarityValidator'
-        ),
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "UserAttributeSimilarityValidator"
+        )
     },
-    {
-        'NAME': (
-            'django.contrib.auth.password_validation.MinimumLengthValidator'
-        ),
-    },
-    {
-        'NAME': (
-            'django.contrib.auth.password_validation.CommonPasswordValidator'
-        ),
-    },
-    {
-        'NAME': (
-            'django.contrib.auth.password_validation.NumericPasswordValidator'
-        ),
-    },
+    {"NAME": ("django.contrib.auth.password_validation.MinimumLengthValidator")},
+    {"NAME": ("django.contrib.auth.password_validation.CommonPasswordValidator")},
+    {"NAME": ("django.contrib.auth.password_validation.NumericPasswordValidator")},
 ]
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = "/"
 
 # Use HTTPS:
 SECURE_PROXY_SSL_HEADER = env(
-    'SECURE_PROXY_SSL_HEADER',
-    default='HTTP_X_FORWARDED_PROTO:https',
-    type_=(
-        lambda v:
-        tuple(v.split(':', 1))
-        if (v is not None and ':' in v)
-        else None
-    ),
+    "SECURE_PROXY_SSL_HEADER",
+    default="HTTP_X_FORWARDED_PROTO:https",
+    type_=(lambda v: tuple(v.split(":", 1)) if (v is not None and ":" in v) else None),
 )
-SECURE_SSL_REDIRECT = env('SECURE_SSL_REDIRECT', default=True, type_=boolish)
-SESSION_COOKIE_SECURE = env(
-    'SESSION_COOKIE_SECURE',
-    default=False,
-    type_=boolish,
-)
-CSRF_COOKIE_SECURE = env('CSRF_COOKIE_SECURE', default=False, type_=boolish)
-SECURE_HSTS_SECONDS = env('SECURE_HSTS_SECONDS', default=0, type_=int)
+SECURE_SSL_REDIRECT = env("SECURE_SSL_REDIRECT", default=True, type_=boolish)
+SESSION_COOKIE_SECURE = env("SESSION_COOKIE_SECURE", default=False, type_=boolish)
+CSRF_COOKIE_SECURE = env("CSRF_COOKIE_SECURE", default=False, type_=boolish)
+SECURE_HSTS_SECONDS = env("SECURE_HSTS_SECONDS", default=0, type_=int)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env(
-    'SECURE_HSTS_INCLUDE_SUBDOMAINS',
-    default=False,
-    type_=boolish,
+    "SECURE_HSTS_INCLUDE_SUBDOMAINS", default=False, type_=boolish
 )
-SECURE_HSTS_PRELOAD = env('SECURE_HSTS_PRELOAD', default=False, type_=boolish)
+SECURE_HSTS_PRELOAD = env("SECURE_HSTS_PRELOAD", default=False, type_=boolish)
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -258,21 +229,19 @@ USE_TZ = True{% if cookiecutter.use_bucketeer_aws_for_file_storage == 'y' %}
 
 
 # Media files
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-AWS_ACCESS_KEY_ID = env('BUCKETEER_AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('BUCKETEER_AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = env('BUCKETEER_BUCKET_NAME'){% endif %}
+AWS_ACCESS_KEY_ID = env("BUCKETEER_AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env("BUCKETEER_AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = env("BUCKETEER_BUCKET_NAME"){% endif %}
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATICFILES_DIRS = [
-    str(PROJECT_ROOT / 'dist'),
-]
-STATIC_URL = '/static/'
-STATIC_ROOT = str(PROJECT_ROOT / 'staticfiles')
+STATICFILES_DIRS = [str(PROJECT_ROOT / "dist")]
+STATIC_URL = "/static/"
+STATIC_ROOT = str(PROJECT_ROOT / "staticfiles")
 
 
 # Per the docs:
@@ -288,64 +257,51 @@ STATIC_ROOT = str(PROJECT_ROOT / 'staticfiles')
 # WHITENOISE_ROOT = PROJECT_ROOT.joinpath(static_dir_root)
 
 SOCIALACCOUNT_PROVIDERS = {
-    'salesforce-production': {
-        'SCOPE': ['web', 'full', 'refresh_token'],
-    },
-    'salesforce-test': {
-        'SCOPE': ['web', 'full', 'refresh_token'],
-    },
-    'salesforce-custom': {
-        'SCOPE': ['web', 'full', 'refresh_token'],
-    },
+    "salesforce-production": {"SCOPE": ["web", "full", "refresh_token"]},
+    "salesforce-test": {"SCOPE": ["web", "full", "refresh_token"]},
+    "salesforce-custom": {"SCOPE": ["web", "full", "refresh_token"]},
 }
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = False
 SOCIALACCOUNT_ADAPTER = (
-    '{{cookiecutter.project_slug}}.multisalesforce.adapter.CustomSocialAccountAdapter'
+    "{{cookiecutter.project_slug}}.multisalesforce.adapter.CustomSocialAccountAdapter"
 )
 
-JS_REVERSE_JS_VAR_NAME = 'api_urls'
-JS_REVERSE_EXCLUDE_NAMESPACES = ['admin']
+JS_REVERSE_JS_VAR_NAME = "api_urls"
+JS_REVERSE_EXCLUDE_NAMESPACES = ["admin"]
 
 
 # Redis configuration:
 
-REDIS_LOCATION = '{0}/{1}'.format(
-    env('REDIS_URL', default='redis://localhost:6379'),
-    0,
-)
+REDIS_LOCATION = "{0}/{1}".format(env("REDIS_URL", default="redis://localhost:6379"), 0)
 CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': REDIS_LOCATION,
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'IGNORE_EXCEPTIONS': True,
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_LOCATION,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "IGNORE_EXCEPTIONS": True,
         },
-    },
+    }
 }
 RQ_QUEUES = {
-    'default': {
-        'USE_REDIS_CACHE': 'default',
-        'DEFAULT_TIMEOUT': 360,
-        'DEFAULT_RESULT_TTL': 720,
+    "default": {
+        "USE_REDIS_CACHE": "default",
+        "DEFAULT_TIMEOUT": 360,
+        "DEFAULT_RESULT_TTL": 720,
     },
-    'short': {
-        'USE_REDIS_CACHE': 'default',
-        'DEFAULT_TIMEOUT': 10,
-        'DEFAULT_RESULT_TTL': 300,
+    "short": {
+        "USE_REDIS_CACHE": "default",
+        "DEFAULT_TIMEOUT": 10,
+        "DEFAULT_RESULT_TTL": 300,
     },
 }
-RQ = {
-    'WORKER_CLASS': '{{cookiecutter.project_slug}}.rq_worker.ConnectionClosingWorker',
-}
+RQ = {"WORKER_CLASS": "{{cookiecutter.project_slug}}.rq_worker.ConnectionClosingWorker"}
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [REDIS_LOCATION],
-        },
-    },
+        "CONFIG": {"hosts": [REDIS_LOCATION]},
+    }
 }
 
 
@@ -357,88 +313,69 @@ GENERATE_REQUEST_ID_IF_NOT_IN_HEADER = True
 REQUEST_ID_RESPONSE_HEADER = "X-Request-ID"
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'filters': {
-        'request_id': {
-            '()': 'log_request_id.filters.RequestIDFilter'
-        },
-        'job_id': {
-            '()': '{{cookiecutter.project_slug}}.logfmt.JobIDFilter'
+    "version": 1,
+    "disable_existing_loggers": True,
+    "filters": {
+        "request_id": {"()": "log_request_id.filters.RequestIDFilter"},
+        "job_id": {"()": "{{cookiecutter.project_slug}}.logfmt.JobIDFilter"},
+    },
+    "formatters": {
+        "verbose": {
+            "()": "{{cookiecutter.project_slug}}.logfmt.LogfmtFormatter",
+            "format": (
+                "%(levelname)s %(asctime)s %(module)s %(process)d "
+                "%(thread)d %(message)s"
+            ),
         }
     },
-    'formatters': {
-        'verbose': {
-            '()': '{{cookiecutter.project_slug}}.logfmt.LogfmtFormatter',
-            'format': (
-                '%(levelname)s %(asctime)s %(module)s %(process)d '
-                '%(thread)d %(message)s'
-            ),
-        },
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'filters': ['request_id'],
-            'formatter': 'verbose'
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "filters": ["request_id"],
+            "formatter": "verbose",
         },
         "rq_console": {
             "level": "DEBUG",
             "class": "rq.utils.ColorizingStreamHandler",
-            'filters': ["job_id"],
+            "filters": ["job_id"],
             "formatter": "verbose",
         },
     },
-    'loggers': {
-        'django.db.backends': {
-            'level': 'ERROR',
-            'handlers': ['console'],
-            'propagate': False,
+    "loggers": {
+        "django.db.backends": {
+            "level": "ERROR",
+            "handlers": ["console"],
+            "propagate": False,
         },
-        'django.server': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        'rq.worker': {
-            "handlers": ["rq_console"],
-            "level": "DEBUG"
-        }
+        "django.server": {"handlers": ["console"], "level": "INFO", "propagate": False},
+        "rq.worker": {"handlers": ["rq_console"], "level": "DEBUG"},
     },
 }
 
 # Raven / Sentry
-SENTRY_DSN = env('SENTRY_DSN', default='')
+SENTRY_DSN = env("SENTRY_DSN", default="")
 
 if SENTRY_DSN:
-    INSTALLED_APPS += ['raven.contrib.django.raven_compat']
-    RAVEN_CONFIG = {
-        'dsn': SENTRY_DSN,
-    }
+    INSTALLED_APPS += ["raven.contrib.django.raven_compat"]
+    RAVEN_CONFIG = {"dsn": SENTRY_DSN}
     MIDDLEWARE = [
         (
-            'raven.contrib.django.raven_compat.middleware.'
-            'SentryResponseErrorIdMiddleware'
-        ),
+            "raven.contrib.django.raven_compat.middleware."
+            "SentryResponseErrorIdMiddleware"
+        )
     ] + MIDDLEWARE
     if not DEBUG:
         # Extend the logging dict with Sentry settings:
-        LOGGING['root'] = {
-            'level': 'WARNING',
-            'handlers': ['sentry'],
+        LOGGING["root"] = {"level": "WARNING", "handlers": ["sentry"]}
+        LOGGING["handlers"]["sentry"] = {
+            "level": "ERROR",
+            "class": ("raven.contrib.django.raven_compat.handlers." "SentryHandler"),
+            "tags": {"custom-tag": "x"},
         }
-        LOGGING['handlers']['sentry'] = {
-            'level': 'ERROR',
-            'class': (
-                'raven.contrib.django.raven_compat.handlers.'
-                'SentryHandler'
-            ),
-            'tags': {'custom-tag': 'x'},
+        LOGGING["loggers"]["raven"] = {
+            "level": "DEBUG",
+            "handlers": ["console"],
+            "propagate": False,
         }
-        LOGGING['loggers']['raven'] = {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
-        }
-        LOGGING['loggers']['rq.worker']['handlers'].append('sentry')
+        LOGGING["loggers"]["rq.worker"]["handlers"].append("sentry")
