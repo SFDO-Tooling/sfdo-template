@@ -17,14 +17,14 @@ declare module "react-router-dom" {
     children?: React$Node
   |}>
 
-  declare export var Link: React$Component<{
+  declare export var Link: React$ComponentType<{
     className?: string,
     to: string | LocationShape,
     replace?: boolean,
     children?: React$Node
   }>
 
-  declare export var NavLink: React$Component<{
+  declare export var NavLink: React$ComponentType<{
     to: string | LocationShape,
     activeClassName?: string,
     className?: string,
@@ -106,14 +106,14 @@ declare module "react-router-dom" {
     url?: string
   };
 
-  declare export var StaticRouter: React$Component<{|
+  declare export var StaticRouter: React$ComponentType<{|
     basename?: string,
     location?: string | Location,
     context: StaticRouterContext,
     children?: React$Node
   |}>
 
-  declare export var MemoryRouter: React$Component<{|
+  declare export var MemoryRouter: React$ComponentType<{|
     initialEntries?: Array<LocationShape | string>,
     initialIndex?: number,
     getUserConfirmation?: GetUserConfirmation,
@@ -121,17 +121,17 @@ declare module "react-router-dom" {
     children?: React$Node
   |}>
 
-  declare export var Router: React$Component<{|
+  declare export var Router: React$ComponentType<{|
     history: RouterHistory,
     children?: React$Node
   |}>
 
-  declare export var Prompt: React$Component<{|
+  declare export var Prompt: React$ComponentType<{|
     message: string | ((location: Location) => string | boolean),
     when?: boolean
   |}>
 
-  declare export var Redirect: React$Component<{|
+  declare export var Redirect: React$ComponentType<{|
     to: string | LocationShape,
     push?: boolean,
     from?: string,
@@ -139,7 +139,7 @@ declare module "react-router-dom" {
     strict?: boolean
   |}>
 
-  declare export var Route: React$Component<{|
+  declare export var Route: React$ComponentType<{|
     component?: React$ComponentType<*>,
     render?: (router: ContextRouter) => React$Node,
     children?: React$ComponentType<ContextRouter> | React$Node,
@@ -150,7 +150,7 @@ declare module "react-router-dom" {
     sensitive?: boolean
   |}>
 
-  declare export var Switch: React$Component<{|
+  declare export var Switch: React$ComponentType<{|
     children?: React$Node,
     location?: Location
   |}>

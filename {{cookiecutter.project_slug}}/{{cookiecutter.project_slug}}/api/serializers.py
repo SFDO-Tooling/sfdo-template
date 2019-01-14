@@ -7,6 +7,14 @@ User = get_user_model()
 
 
 class FullUserSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(read_only=True)
+
     class Meta:
         model = User
-        fields = ("username", "email")
+        fields = (
+            "id",
+            "username",
+            "email",
+            "valid_token_for",
+            "is_staff",
+        )

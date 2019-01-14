@@ -3,7 +3,7 @@
 import { cache } from 'utils/caching';
 
 import type { ThunkAction } from 'redux-thunk';
-import type { User } from 'accounts/reducer';
+import type { User } from 'user/reducer';
 
 type LoginAction = { type: 'USER_LOGGED_IN', payload: User };
 type LogoutAction = { type: 'USER_LOGGED_OUT' };
@@ -13,27 +13,27 @@ export const login = (payload: User): LoginAction => {
   if (window.Raven && window.Raven.isSetup()) {
     window.Raven.setUserContext(payload);
   }
+  /* istanbul ignore else */
+  if (payload) {
+    window.socket.subscribe({
+      model: 'user',
+      id: payload.id,
+    });
+  }
   return {
     type: 'USER_LOGGED_IN',
     payload,
   };
 };
 
-export const doLocalLogout = (): LogoutAction => {
-  cache.clear();
-  if (window.socket) {
-    window.socket.close(1000, 'user logged out');
-    Reflect.deleteProperty(window, 'socket');
-  }
-  if (window.Raven && window.Raven.isSetup()) {
-    window.Raven.setUserContext();
-  }
-  return {
-    type: 'USER_LOGGED_OUT',
-  };
-};
-
 export const logout = (): ThunkAction => (dispatch, getState, { apiFetch }) =>
   apiFetch(window.api_urls.account_logout(), {
     method: 'POST',
-  }).then(() => dispatch(doLocalLogout()));
+  }).then(() => {
+    cache.clear();
+    window.socket.reconnect();
+    if (window.Raven && window.Raven.isSetup()) {
+      window.Raven.setUserContext();
+    }
+    return dispatch({ type: 'USER_LOGGED_OUT' });
+  });

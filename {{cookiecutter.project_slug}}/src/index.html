@@ -40,6 +40,7 @@
       </script>
       <script type="text/javascript" src="<%= htmlWebpackPlugin.files.chunks.raven.entry %>"></script>
     {% endif %}
+    {{ GLOBALS|json_script:"js-globals" }}
     <script type="text/javascript" charset="utf-8">
       {% js_reverse_inline %}
     </script>

@@ -6,17 +6,26 @@ import { log } from 'utils/logging';
 
 import type { Dispatch } from 'redux-thunk';
 
-export const getAction = (
-  msg: {
-    [string]: mixed,
-  } = {},
-): null => {
-  switch (msg.type) {
-    // case 'MY_ACTION_TYPE':
-    //   return myActionCreator();
-    default:
-      return null;
+type SubscriptionEvent = {|
+  ok?: string,
+  error?: string,
+|};
+type ErrorEvent = {|
+  type: 'BACKEND_ERROR',
+  payload: {| message: string |},
+|};
+type EventType = SubscriptionEvent | ErrorEvent;
+type Subscription = {| model: string, id: string |};
+
+export const getAction = (event: EventType): null => {
+  if (!event || !event.type) {
+    return null;
   }
+  // switch (event.type) {
+  //   case 'MY_ACTION_TYPE':
+  //     return myActionCreator(event.payload);
+  // }
+  return null;
 };
 
 export const createSocket = ({
@@ -27,7 +36,10 @@ export const createSocket = ({
   url: string,
   options?: { [string]: mixed },
   dispatch: Dispatch,
-}): Sockette => {
+} = {}): {
+  subscribe: (payload: Subscription) => void,
+  reconnect: () => void,
+} => {
   const defaults = {
     maxAttempts: 25,
     onopen: () => {},
@@ -39,24 +51,32 @@ export const createSocket = ({
   };
   const opts = { ...defaults, ...options };
 
-  return new Sockette(url, {
+  let open = false;
+  const pending = new Set();
+
+  const socket = new Sockette(url, {
     protocols: opts.protocols,
     timeout: opts.timeout,
     maxAttempts: opts.maxAttempts,
     onopen: e => {
       log('[WebSocket] connected');
+      open = true;
+      for (const payload of pending) {
+        log('[WebSocket] subscribing to:', payload);
+        socket.json(payload);
+      }
+      pending.clear();
       opts.onopen(e);
     },
     onmessage: e => {
-      let msg = e.data;
+      let data = e.data;
       try {
-        msg = JSON.parse(e.data);
+        data = JSON.parse(e.data);
       } catch (err) {
         // swallow error
       }
-      log('[WebSocket] received:', msg);
-      const action = getAction(msg);
-      /* istanbul ignore if */
+      log('[WebSocket] received:', data);
+      const action = getAction(data);
       if (action) {
         dispatch(action);
       }
@@ -72,6 +92,7 @@ export const createSocket = ({
     },
     onclose: e => {
       log('[WebSocket] closed');
+      open = false;
       opts.onclose(e);
     },
     onerror: e => {
@@ -79,4 +100,22 @@ export const createSocket = ({
       opts.onerror(e);
     },
   });
+
+  const subscribe = (payload: Subscription) => {
+    if (open) {
+      log('[WebSocket] subscribing to:', payload);
+      socket.json(payload);
+    } else {
+      pending.add(payload);
+    }
+  };
+  const reconnect = () => {
+    socket.close(1000, 'user logged out');
+    socket.open();
+  };
+
+  return {
+    subscribe,
+    reconnect,
+  };
 };

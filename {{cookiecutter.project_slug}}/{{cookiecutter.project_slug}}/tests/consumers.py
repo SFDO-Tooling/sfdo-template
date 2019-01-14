@@ -1,41 +1,29 @@
 import pytest
-from django.contrib.auth.models import AnonymousUser
 from channels.testing import WebsocketCommunicator
+
+from ..api.push import report_error
 from ..consumers import PushNotificationConsumer
-from ..api.push import push_message_to_user
 
 
 @pytest.mark.django_db
 @pytest.mark.asyncio
-async def test_push_notification_consumer__push_message_to_user(user_factory):
+async def test_push_notification_consumer__user_token_invalid(user_factory):
     user = user_factory()
 
-    communicator = WebsocketCommunicator(
-        PushNotificationConsumer,
-        "/ws/notifications/",
-    )
+    communicator = WebsocketCommunicator(PushNotificationConsumer, "/ws/notifications/")
     communicator.scope["user"] = user
-    connected, subprotocol = await communicator.connect()
+    connected, _ = await communicator.connect()
     assert connected
 
-    message = {
-        'type': 'TEST_MESSAGE',
-    }
-    await push_message_to_user(user, message)
+    await communicator.send_json_to({"model": "user", "id": str(user.id)})
+    response = await communicator.receive_json_from()
+    assert "ok" in response
+
+    await report_error(user)
     response = await communicator.receive_json_from()
     assert response == {
-        "type": "TEST_MESSAGE",
+        "type": "BACKEND_ERROR",
+        "payload": {"message": "There was an error"},
     }
 
     await communicator.disconnect()
-
-
-@pytest.mark.asyncio
-async def test_push_notification_consumer__anonymous():
-    communicator = WebsocketCommunicator(
-        PushNotificationConsumer,
-        "/ws/notifications/",
-    )
-    communicator.scope["user"] = AnonymousUser()
-    connected, subprotocol = await communicator.connect()
-    assert not connected

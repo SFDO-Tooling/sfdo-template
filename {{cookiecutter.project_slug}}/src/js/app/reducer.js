@@ -2,11 +2,11 @@
 
 import { combineReducers } from 'redux';
 
-import userReducer from 'accounts/reducer';
+import userReducer from 'user/reducer';
 
 import type { CombinedReducer } from 'redux';
 
-import type { User } from 'accounts/reducer';
+import type { User } from 'user/reducer';
 
 export type AppState = {
   +user: User,

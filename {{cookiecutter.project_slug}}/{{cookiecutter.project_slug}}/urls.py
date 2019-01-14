@@ -16,12 +16,11 @@ Including another URLconf
 from urllib.parse import urljoin
 
 from django.conf import settings
-from django.urls import path, re_path, include
 from django.contrib import admin
+from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
 from .routing import websockets
-
 
 PREFIX = settings.ADMIN_AREA_PREFIX
 

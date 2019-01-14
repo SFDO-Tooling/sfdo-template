@@ -1,9 +1,9 @@
-from pytest_factoryboy import register
-from rest_framework.test import APIClient
 import factory
 import pytest
-
+from allauth.socialaccount.models import SocialAccount, SocialApp, SocialToken
 from django.contrib.auth import get_user_model
+from pytest_factoryboy import register
+from rest_framework.test import APIClient
 
 from allauth.socialaccount.models import (
     SocialApp,
@@ -18,11 +18,11 @@ User = get_user_model()
 class SocialAppFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = SocialApp
-        django_get_or_create = ('provider',)
+        django_get_or_create = ("provider",)
 
-    name = 'Salesforce Production'
-    provider = 'salesforce-production'
-    key = 'https://login.salesforce.com/'
+    name = "Salesforce Production"
+    provider = "salesforce-production"
+    key = "https://login.salesforce.com/"
 
 
 @register
@@ -30,8 +30,8 @@ class SocialTokenFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = SocialToken
 
-    token = '0123456789abcdef'
-    token_secret = 'secret.0123456789abcdef'
+    token = "0123456789abcdef"
+    token_secret = "secret.0123456789abcdef"
     app = factory.SubFactory(SocialAppFactory)
 
 
@@ -40,11 +40,11 @@ class SocialAccountFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = SocialAccount
 
-    provider = 'salesforce-production'
-    socialtoken_set = factory.RelatedFactory(SocialTokenFactory, 'account')
-    uid = factory.Sequence('https://example.com/{}'.format)
+    provider = "salesforce-production"
+    uid = factory.Sequence("https://example.com/{}".format)
+    socialtoken_set = factory.RelatedFactory(SocialTokenFactory, "account")
     extra_data = {
-        'instance_url': 'https://example.com',
+        "instance_url": "https://example.com",
     }
 
 
@@ -55,10 +55,10 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     email = factory.Sequence("user_{}@example.com".format)
     username = factory.Sequence("user_{}@example.com".format)
-    password = factory.PostGenerationMethodCall('set_password', 'foobar')
-    socialaccount_set = factory.RelatedFactory(SocialAccountFactory, 'user')
+    password = factory.PostGenerationMethodCall("set_password", "foobar")
+    socialaccount_set = factory.RelatedFactory(SocialAccountFactory, "user")
 
 
-# @pytest.fixture
-# def anon_client():
-#     return APIClient()
+@pytest.fixture
+def anon_client():  # pragma: nocover
+    return APIClient()

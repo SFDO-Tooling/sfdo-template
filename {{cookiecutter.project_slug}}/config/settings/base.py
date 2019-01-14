@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 from os import environ
 from pathlib import Path
+
 import dj_database_url
 from django.core.exceptions import ImproperlyConfigured
 
@@ -119,7 +120,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "log_request_id.middleware.RequestIDMiddleware",
+    "{{cookiecutter.project_slug}}.logging_middleware.LoggingMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -263,9 +264,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = False
-SOCIALACCOUNT_ADAPTER = (
-    "{{cookiecutter.project_slug}}.multisalesforce.adapter.CustomSocialAccountAdapter"
-)
+SOCIALACCOUNT_ADAPTER = "{{cookiecutter.project_slug}}.multisalesforce.adapter.CustomSocialAccountAdapter"
 
 JS_REVERSE_JS_VAR_NAME = "api_urls"
 JS_REVERSE_EXCLUDE_NAMESPACES = ["admin"]
@@ -304,6 +303,13 @@ CHANNEL_LAYERS = {
     }
 }
 
+# Rest Framework settings:
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    )
+}
+
 
 # Logging
 
@@ -323,8 +329,8 @@ LOGGING = {
         "verbose": {
             "()": "{{cookiecutter.project_slug}}.logfmt.LogfmtFormatter",
             "format": (
-                "%(levelname)s %(asctime)s %(module)s %(process)d "
-                "%(thread)d %(message)s"
+                "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d "
+                "%(message)s"
             ),
         }
     },
@@ -337,7 +343,7 @@ LOGGING = {
         },
         "rq_console": {
             "level": "DEBUG",
-            "class": "rq.utils.ColorizingStreamHandler",
+            "class": "logging.StreamHandler",
             "filters": ["job_id"],
             "formatter": "verbose",
         },
@@ -350,6 +356,12 @@ LOGGING = {
         },
         "django.server": {"handlers": ["console"], "level": "INFO", "propagate": False},
         "rq.worker": {"handlers": ["rq_console"], "level": "DEBUG"},
+        "{{cookiecutter.project_slug}}.multisalesforce": {"handlers": ["console"], "level": "DEBUG"},
+        "{{cookiecutter.project_slug}}.logging_middleware": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
     },
 }
 
