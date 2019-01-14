@@ -1,9 +1,10 @@
 import factory
-import pytest
 from allauth.socialaccount.models import SocialAccount, SocialApp, SocialToken
 from django.contrib.auth import get_user_model
 from pytest_factoryboy import register
-from rest_framework.test import APIClient
+
+# import pytest
+# from rest_framework.test import APIClient
 
 User = get_user_model()
 

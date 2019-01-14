@@ -1,5 +1,4 @@
 from collections import namedtuple
-from importlib import import_module
 
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from django.apps import apps
@@ -7,6 +6,8 @@ from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.utils.translation import gettext as _
 
 from .api.constants import CHANNELS_GROUP_NAME
+
+# from importlib import import_module
 
 Request = namedtuple("Request", "user")
 
