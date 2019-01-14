@@ -77,6 +77,8 @@ export const createSocket = ({
       }
       log('[WebSocket] received:', data);
       const action = getAction(data);
+      // @@@
+      /* istanbul ignore if */
       if (action) {
         dispatch(action);
       }

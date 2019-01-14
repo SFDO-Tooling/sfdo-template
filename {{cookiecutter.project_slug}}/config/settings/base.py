@@ -16,7 +16,6 @@ from pathlib import Path
 import dj_database_url
 from django.core.exceptions import ImproperlyConfigured
 
-
 BOOLS = ("True", "true", "T", "t", "1", 1)
 
 
@@ -165,11 +164,7 @@ SITE_ID = 1
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    "default": dj_database_url.config(
-        default="postgres:///{{cookiecutter.project_slug}}"
-    )
-}
+DATABASES = {"default": dj_database_url.config(default="postgres:///{{cookiecutter.project_slug}}")}
 
 # Custom User model:
 AUTH_USER_MODEL = "api.User"
@@ -264,7 +259,9 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = False
-SOCIALACCOUNT_ADAPTER = "{{cookiecutter.project_slug}}.multisalesforce.adapter.CustomSocialAccountAdapter"
+SOCIALACCOUNT_ADAPTER = (
+    "{{cookiecutter.project_slug}}.multisalesforce.adapter.CustomSocialAccountAdapter"
+)
 
 JS_REVERSE_JS_VAR_NAME = "api_urls"
 JS_REVERSE_EXCLUDE_NAMESPACES = ["admin"]

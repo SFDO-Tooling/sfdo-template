@@ -5,12 +5,6 @@ from django.contrib.auth import get_user_model
 from pytest_factoryboy import register
 from rest_framework.test import APIClient
 
-from allauth.socialaccount.models import (
-    SocialApp,
-    SocialAccount,
-    SocialToken,
-)
-
 User = get_user_model()
 
 
@@ -43,9 +37,7 @@ class SocialAccountFactory(factory.django.DjangoModelFactory):
     provider = "salesforce-production"
     uid = factory.Sequence("https://example.com/{}".format)
     socialtoken_set = factory.RelatedFactory(SocialTokenFactory, "account")
-    extra_data = {
-        "instance_url": "https://example.com",
-    }
+    extra_data = {"instance_url": "https://example.com"}
 
 
 @register
@@ -59,6 +51,6 @@ class UserFactory(factory.django.DjangoModelFactory):
     socialaccount_set = factory.RelatedFactory(SocialAccountFactory, "user")
 
 
-@pytest.fixture
-def anon_client():  # pragma: nocover
-    return APIClient()
+# @pytest.fixture
+# def anon_client():
+#     return APIClient()

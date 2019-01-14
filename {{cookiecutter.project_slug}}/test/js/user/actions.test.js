@@ -37,7 +37,7 @@ describe('login', () => {
       model: 'user',
       id: 'user-id',
     };
-    actions.login(user)
+    actions.login(user);
 
     expect(window.socket.subscribe).toHaveBeenCalledWith(userSubscription);
   });

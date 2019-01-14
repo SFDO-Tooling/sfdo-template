@@ -14,8 +14,8 @@ Request = namedtuple("Request", "user")
 KNOWN_MODELS = {"user"}
 
 
-def user_context(user):
-    return {"request": Request(user)}
+# def user_context(user):
+#     return {"request": Request(user)}
 
 
 class PushNotificationConsumer(AsyncJsonWebsocketConsumer):
@@ -39,25 +39,25 @@ class PushNotificationConsumer(AsyncJsonWebsocketConsumer):
         if "content" in event:
             await self.send_json(event["content"])
             return
-        if "serializer" in event and "instance" in event and "inner_type" in event:
-            instance = self.get_instance(**event["instance"])
-            serializer = self.get_serializer(event["serializer"])
-            payload = {
-                "payload": serializer(
-                    instance=instance, context=user_context(self.scope["user"])
-                ).data,
-                "type": event["inner_type"],
-            }
-            await self.send_json(payload)
-            return
+        # if "serializer" in event and "instance" in event and "inner_type" in event:
+        #     instance = self.get_instance(**event["instance"])
+        #     serializer = self.get_serializer(event["serializer"])
+        #     payload = {
+        #         "payload": serializer(
+        #             instance=instance, context=user_context(self.scope["user"])
+        #         ).data,
+        #         "type": event["inner_type"],
+        #     }
+        #     await self.send_json(payload)
+        #     return
 
     def get_instance(self, *, model, id):
         Model = apps.get_model("api", model)
         return Model.objects.get(pk=id)
 
-    def get_serializer(self, serializer_path):
-        mod, serializer = serializer_path.rsplit(".", 1)
-        return getattr(import_module(mod), serializer)
+    # def get_serializer(self, serializer_path):
+    #     mod, serializer = serializer_path.rsplit(".", 1)
+    #     return getattr(import_module(mod), serializer)
 
     async def receive_json(self, content, **kwargs):
         # Just used to subscribe to notification channels.

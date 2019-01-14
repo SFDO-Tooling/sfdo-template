@@ -23,6 +23,14 @@ describe('getAction', () => {
   // });
 
   test('handles unknown event', () => {
+    const event = { type: 'UNKNOWN' };
+    const expected = null;
+    const actual = sockets.getAction(event);
+
+    expect(actual).toEqual(expected);
+  });
+
+  test('handles unknown event without type', () => {
     const event = { foo: 'bar' };
     const expected = null;
     const actual = sockets.getAction(event);

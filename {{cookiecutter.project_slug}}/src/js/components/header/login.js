@@ -8,6 +8,15 @@ import { logError } from 'utils/logging';
 
 import CustomDomainModal from 'components/header/customDomainModal';
 
+type Props = {
+  id: string,
+  label: string | React.Node,
+  buttonClassName: string,
+  buttonVariant: string,
+  triggerClassName?: string,
+  disabled: boolean,
+  nubbinPosition: string,
+};
 type MenuOption =
   | {|
       label: string,
@@ -17,8 +26,17 @@ type MenuOption =
     |}
   | {| type: string |};
 
-class Login extends React.Component<{}, { modalOpen: boolean }> {
-  constructor(props: {}) {
+class Login extends React.Component<Props, { modalOpen: boolean }> {
+  static defaultProps = {
+    id: 'login',
+    label: 'Log In',
+    buttonClassName: 'slds-button_outline-brand',
+    buttonVariant: 'base',
+    disabled: false,
+    nubbinPosition: 'top right',
+  };
+
+  constructor(props: Props) {
     super(props);
     this.state = { modalOpen: false };
     if (!window.api_urls.salesforce_production_login) {
@@ -80,14 +98,16 @@ class Login extends React.Component<{}, { modalOpen: boolean }> {
     return (
       <>
         <Dropdown
-          id="login"
-          label="Log In"
+          id={this.props.id}
+          label={this.props.label}
           className="slds-dropdown_actions
             slds-dropdown_medium"
-          buttonClassName="slds-button_outline-brand"
-          buttonVariant="base"
+          triggerClassName={this.props.triggerClassName}
+          buttonClassName={this.props.buttonClassName}
+          buttonVariant={this.props.buttonVariant}
+          disabled={this.props.disabled}
           menuPosition="relative"
-          nubbinPosition="top right"
+          nubbinPosition={this.props.nubbinPosition}
           iconCategory="utility"
           iconName="down"
           iconPosition="right"
