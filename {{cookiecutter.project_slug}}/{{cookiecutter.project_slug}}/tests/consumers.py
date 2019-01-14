@@ -7,7 +7,7 @@ from ..consumers import PushNotificationConsumer
 
 @pytest.mark.django_db
 @pytest.mark.asyncio
-async def test_push_notification_consumer__user_token_invalid(user_factory):
+async def test_push_notification_consumer__report_error(user_factory):
     user = user_factory()
 
     communicator = WebsocketCommunicator(PushNotificationConsumer, "/ws/notifications/")
