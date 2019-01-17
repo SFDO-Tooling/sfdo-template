@@ -6,8 +6,7 @@ const routes = {
 
 export const routePatterns = {
   home: () => '/',
-  auth_error: () =>
-    '/accounts/salesforce-(custom|production|test)/login/callback',
+  auth_error: () => '/accounts/*',
 };
 
 export default routes;

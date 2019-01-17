@@ -10,6 +10,7 @@ beforeAll(() => {
     salesforce_test_login: () => '/accounts/salesforce-test/login/',
     salesforce_custom_login: () => '/accounts/salesforce-custom/login/',
   };
+  window.GLOBALS = {};
   window.console.error = jest.fn();
   window.console.warn = jest.fn();
   window.console.info = jest.fn();
