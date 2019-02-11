@@ -4,8 +4,6 @@ from django.views.decorators.cache import never_cache
 from rest_framework import pagination, permissions, serializers, viewsets
 from rest_framework.response import Response
 
-from {{cookiecutter.project_slug}}.api import models
-
 
 class IsAPIUser(permissions.BasePermission):
     """Permission check for API permission.

@@ -133,7 +133,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "{{cookiecutter.project_slug}}.logging_middleware.LoggingMiddleware",
-    "{{cookiecutter.project_slug}}.admin_middleware.AdminRestrictMiddleware"
+    "{{cookiecutter.project_slug}}.admin_middleware.AdminRestrictMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -309,7 +309,7 @@ CACHES = {
 RQ_QUEUES = {
     "default": {
         "USE_REDIS_CACHE": "default",
-        "DEFAULT_TIMEOUT": env("REDIS_JOB_TIMEOUT", type_=int, default=3600),,
+        "DEFAULT_TIMEOUT": env("REDIS_JOB_TIMEOUT", type_=int, default=3600),
         "DEFAULT_RESULT_TTL": 720,
     },
     "short": {

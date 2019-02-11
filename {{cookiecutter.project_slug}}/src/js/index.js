@@ -39,8 +39,8 @@ const Home = () => (
     className="slds-text-longform
       slds-p-around_x-large"
   >
-    <h1 className="slds-text-heading_large">Welcome to {{cookiecutter.project_name}}!</h1>
-    <p>This is sample intro text, where your content might live.</p>
+    <h1 className="slds-text-heading_large">{t('Welcome to {{cookiecutter.project_name}}')}!</h1>
+    <p>{t('This is sample intro text, where your content might live.')}</p>
   </div>
 );
 

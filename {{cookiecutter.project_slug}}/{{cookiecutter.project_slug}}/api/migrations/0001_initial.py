@@ -4,7 +4,10 @@ import django.contrib.auth.models
 import django.contrib.auth.validators
 import django.core.validators
 import django.utils.timezone
+import hashid_field.field
 from django.db import migrations, models
+
+import {{cookiecutter.project_slug}}.api.models
 
 
 class Migration(migrations.Migration):
@@ -19,11 +22,15 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.AutoField(
-                        auto_created=True,
+                    hashid_field.field.HashidAutoField(
+                        alphabet=(
+                            "abcdefghijklmnopqrstuvwxyz"
+                            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            "1234567890"
+                        ),
+                        min_length=7,
                         primary_key=True,
                         serialize=False,
-                        verbose_name="ID",
                     ),
                 ),
                 ("password", models.CharField(max_length=128, verbose_name="password")),
@@ -135,11 +142,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={
-                "verbose_name": "user",
-                "verbose_name_plural": "users",
-                "abstract": False,
-            },
-            managers=[("objects", django.contrib.auth.models.UserManager())],
+            options={},
+            managers=[("objects", {{cookiecutter.project_slug}}.api.models.UserManager())],
         )
     ]

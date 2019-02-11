@@ -10,7 +10,7 @@ import type { User } from 'user/reducer';
 
 export type AppState = {
   +user: User,
-  +socket: SocketReducer,
+  +socket: Socket,
 };
 
 type Action = { +type: string };

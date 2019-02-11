@@ -127,10 +127,7 @@ class Login extends React.Component<Props, { modalOpen: boolean }> {
           options={menuOpts}
           onSelect={this.handleSelect}
         />
-        <CustomDomainModal
-          isOpen={modalOpen}
-          toggleModal={this.toggleModal}
-        />
+        <CustomDomainModal isOpen={modalOpen} toggleModal={this.toggleModal} />
       </>
     );
   }
