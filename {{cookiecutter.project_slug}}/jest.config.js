@@ -19,7 +19,7 @@ module.exports = {
   // cacheDirectory: "/var/folders/76/9qsnnbp12fz9v1n_0kns7fgh0000gn/T/jest_dx",
 
   // Automatically clear mock calls and instances between every test
-  // clearMocks: false,
+  clearMocks: true,
 
   // Indicates whether the coverage information should be collected while executing the test
   collectCoverage: true,
@@ -29,6 +29,7 @@ module.exports = {
     'src/js/**/*.{js,jsx}',
     '!src/js/index.js',
     '!src/js/raven.js',
+    '!src/js/i18n.js',
   ],
 
   // The directory where Jest should output its coverage files
@@ -74,7 +75,7 @@ module.exports = {
   // A map from regular expressions to module names that allow to stub out resources with a single module
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/test/js/__mocks__/fileMock.js',
+      '<rootDir>/__mocks__/fileMock.js',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -105,7 +106,7 @@ module.exports = {
   // resolver: null,
 
   // Automatically restore mock state between every test
-  restoreMocks: true,
+  // restoreMocks: false,
 
   // The root directory that Jest should scan for tests and modules within
   // rootDir: null,
@@ -122,7 +123,7 @@ module.exports = {
   // setupFiles: [],
 
   // The path to a module that runs some code to configure or set up the testing framework before each test
-  setupTestFrameworkScriptFile: '<rootDir>test/js/setupTests.js',
+  setupFilesAfterEnv: ['<rootDir>test/js/setupTests.js'],
 
   // A list of paths to snapshot serializer modules Jest should use for snapshot testing
   // snapshotSerializers: [],

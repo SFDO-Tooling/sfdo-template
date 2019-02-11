@@ -2,19 +2,20 @@
 
 import * as React from 'react';
 import Dropdown from '@salesforce/design-system-react/components/menu-dropdown';
+import { t } from 'i18next';
 
 import { addUrlParams } from 'utils/api';
 import { logError } from 'utils/logging';
-
 import CustomDomainModal from 'components/header/customDomainModal';
 
 type Props = {
   id: string,
-  label: string | React.Node,
+  label?: string | React.Node,
   buttonClassName: string,
   buttonVariant: string,
   triggerClassName?: string,
   disabled: boolean,
+  menuPosition: string,
   nubbinPosition: string,
 };
 type MenuOption =
@@ -29,10 +30,10 @@ type MenuOption =
 class Login extends React.Component<Props, { modalOpen: boolean }> {
   static defaultProps = {
     id: 'login',
-    label: 'Log In',
     buttonClassName: 'slds-button_outline-brand',
     buttonVariant: 'base',
     disabled: false,
+    menuPosition: 'overflowBoundaryElement',
     nubbinPosition: 'top right',
   };
 
@@ -69,14 +70,14 @@ class Login extends React.Component<Props, { modalOpen: boolean }> {
   static getMenuOpts(): Array<MenuOption> {
     return [
       {
-        label: 'Production or Developer Org',
+        label: t('Production or Developer Org'),
         href:
           window.api_urls.salesforce_production_login &&
           window.api_urls.salesforce_production_login(),
         disabled: !window.api_urls.salesforce_production_login,
       },
       {
-        label: 'Sandbox or Scratch Org',
+        label: t('Sandbox or Scratch Org'),
         href:
           window.api_urls.salesforce_test_login &&
           window.api_urls.salesforce_test_login(),
@@ -86,7 +87,7 @@ class Login extends React.Component<Props, { modalOpen: boolean }> {
         type: 'divider',
       },
       {
-        label: 'Use Custom Domain',
+        label: t('Use Custom Domain'),
         modal: Boolean(window.api_urls.salesforce_custom_login),
         disabled: !window.api_urls.salesforce_custom_login,
       },
@@ -95,19 +96,31 @@ class Login extends React.Component<Props, { modalOpen: boolean }> {
 
   render(): React.Node {
     const menuOpts = Login.getMenuOpts();
+    const {
+      id,
+      label,
+      triggerClassName,
+      buttonClassName,
+      buttonVariant,
+      disabled,
+      menuPosition,
+      nubbinPosition,
+    } = this.props;
+    const { modalOpen } = this.state;
+
     return (
       <>
         <Dropdown
-          id={this.props.id}
-          label={this.props.label}
+          id={id}
+          label={label === undefined ? t('Log In') : label}
           className="slds-dropdown_actions
             slds-dropdown_medium"
-          triggerClassName={this.props.triggerClassName}
-          buttonClassName={this.props.buttonClassName}
-          buttonVariant={this.props.buttonVariant}
-          disabled={this.props.disabled}
-          menuPosition="relative"
-          nubbinPosition={this.props.nubbinPosition}
+          triggerClassName={triggerClassName}
+          buttonClassName={buttonClassName}
+          buttonVariant={buttonVariant}
+          disabled={disabled}
+          menuPosition={menuPosition}
+          nubbinPosition={nubbinPosition}
           iconCategory="utility"
           iconName="down"
           iconPosition="right"
@@ -115,7 +128,7 @@ class Login extends React.Component<Props, { modalOpen: boolean }> {
           onSelect={this.handleSelect}
         />
         <CustomDomainModal
-          isOpen={this.state.modalOpen}
+          isOpen={modalOpen}
           toggleModal={this.toggleModal}
         />
       </>

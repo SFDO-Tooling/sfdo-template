@@ -1,16 +1,19 @@
 import React from 'react';
-import { render, fireEvent } from 'react-testing-library';
+import { fireEvent, render } from 'react-testing-library';
 
 import { addUrlParams } from 'utils/api';
-
 import CustomDomainModal from 'components/header/customDomainModal';
 
 describe('<CustomDomainModal />', () => {
   const toggleModal = jest.fn();
 
-  const setup = () => {
+  const setup = options => {
+    const defaults = {
+      isOpen: true,
+    };
+    const opts = { ...defaults, ...options };
     const { getByLabelText, getByText, getByTestId } = render(
-      <CustomDomainModal isOpen={true} toggleModal={toggleModal} />,
+      <CustomDomainModal isOpen={opts.isOpen} toggleModal={toggleModal} />,
     );
     return { getByLabelText, getByText, getByTestId };
   };

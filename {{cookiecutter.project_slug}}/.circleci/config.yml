@@ -1,16 +1,15 @@
 version: 2
 jobs:
-
   build:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.6.6
+      - image: circleci/python:3.7
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
-            - v1-{{cookiecutter.project_slug}}-py-
+            - v1-{{cookiecutter.project_slug}}-py-3.7-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
+            - v1-{{cookiecutter.project_slug}}-py-3.7-
       - restore_cache:
           keys:
             - v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
@@ -46,28 +45,28 @@ jobs:
       - save_cache:
           key: v1-{{cookiecutter.project_slug}}-node-{% raw %}{{ checksum "bin/unpack-node" }}{% endraw %}
           paths:
-            - "~/{{cookiecutter.project_slug}}/node"
+            - '~/{{cookiecutter.project_slug}}/node'
       - save_cache:
-          key: v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
+          key: v1-{{cookiecutter.project_slug}}-py-3.7-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
           paths:
-            - "~/.cache/pip"
+            - '~/.cache/pip'
             - ./venv
       - save_cache:
           key: v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
           paths:
-            - "~/.cache/yarn"
-            - "~/{{cookiecutter.project_slug}}/node_modules"
+            - '~/.cache/yarn'
+            - '~/{{cookiecutter.project_slug}}/node_modules'
 
   lint:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.6.6
+      - image: circleci/python:3.7
     steps:
       - checkout
       - restore_cache:
           key: v1-{{cookiecutter.project_slug}}-node-{% raw %}{{ checksum "bin/unpack-node" }}{% endraw %}
       - restore_cache:
-          key: v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
+          key: v1-{{cookiecutter.project_slug}}-py-3.7-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
       - restore_cache:
           keys:
             - v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
@@ -87,7 +86,7 @@ jobs:
   test-client:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.6.6
+      - image: circleci/python:3.7
     steps:
       - checkout
       - restore_cache:
@@ -118,17 +117,20 @@ jobs:
   test-python:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.6.6
+      - image: circleci/python:3.7
       - image: circleci/redis:latest
       - image: circleci/postgres:latest
         environment:
           POSTGRES_USER: ubuntu
           POSTGRES_DB: circle_test
-          POSTGRES_PASSWORD: circle_test
+          POSTGRES_PASSWORD: circle_test{% if cookiecutter.use_bucketeer_aws_for_file_storage == 'y' %}
+          AWS_BUCKET_NAME: None
+          AWS_SECRET_ACCESS_KEY: None
+          AWS_ACCESS_KEY_ID: None{% endif %}
     steps:
       - checkout
       - restore_cache:
-          key: v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
+          key: v1-{{cookiecutter.project_slug}}-py-3.7-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
       - run:
           name: Install Dockerize
           command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
@@ -160,7 +162,7 @@ jobs:
   report-test-coverage:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.6.6
+      - image: circleci/python:3.7
     steps:
       - checkout
       - attach_workspace:
@@ -172,7 +174,7 @@ jobs:
             - v1-{{cookiecutter.project_slug}}-npm-{% raw %}{{ checksum "yarn.lock" }}{% endraw %}
             - v1-{{cookiecutter.project_slug}}-npm-
       - restore_cache:
-          key: v1-{{cookiecutter.project_slug}}-py-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
+          key: v1-{{cookiecutter.project_slug}}-py-3.7-{% raw %}{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}-{{ checksum "requirements/local.txt" }}{% endraw %}
       - run:
           name: Set $PATH
           command: |
