@@ -30,7 +30,7 @@ const init = (cb: () => void): void =>
           logError('missing translation', { lng, ns, key, fallbackValue });
         },
         backend: {
-          loadPath: '/static/{{lng}}/{{ns}}.json',
+          loadPath: {% raw %}'/static/{{lng}}/{{ns}}.json'{% endraw %},
         },
       },
       cb,

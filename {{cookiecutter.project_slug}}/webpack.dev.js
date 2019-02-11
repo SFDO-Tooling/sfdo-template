@@ -57,7 +57,7 @@ module.exports = merge(common, {
           extensions: [],
         },
         resource: {
-          savePath: '../locales_dev/{{lng}}/{{ns}}.json',
+          savePath: {% raw %}'../locales_dev/{{lng}}/{{ns}}.json'{% endraw %},
         },
         defaultValue(lng, ns, key) {
           if (lng === 'en') {

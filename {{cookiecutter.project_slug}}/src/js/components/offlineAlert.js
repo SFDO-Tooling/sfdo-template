@@ -12,12 +12,12 @@ const reloadPage = (): void => {
 const OfflineAlert = () => (
   <AlertContainer className="offline-alert">
     <Alert
-      labels={{
+      labels={% raw %}{{
         heading: t(
           'You are in offline mode. We are trying to reconnect, but you may need to',
         ),
         headingLink: t('reload the page.'),
-      }}
+      }}{% endraw %}
       onClickHeadingLink={reloadPage}
       variant="offline"
     />
