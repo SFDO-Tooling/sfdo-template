@@ -1,6 +1,7 @@
 // @flow
 
 import * as React from 'react';
+import { t } from 'i18next';
 
 const Footer = (props: { logoSrc: string }) => (
   <footer
@@ -25,7 +26,7 @@ const Footer = (props: { logoSrc: string }) => (
       className="footer-item
         slds-grid"
     >
-      <p>Copyright {% now 'utc', '%Y' %} {{cookiecutter.author_name}}. All rights reserved.</p>
+      <p>{t('Copyright {% now 'utc', '%Y' %} {{cookiecutter.author_name}}. All rights reserved.')}</p>
     </div>
   </footer>
 );

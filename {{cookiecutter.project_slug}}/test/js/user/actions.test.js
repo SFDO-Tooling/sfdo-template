@@ -3,7 +3,6 @@ import fetchMock from 'fetch-mock';
 import { storeWithApi } from './../utils';
 
 import * as actions from 'user/actions';
-import { cache } from 'utils/caching';
 
 describe('login', () => {
   beforeEach(() => {
@@ -90,15 +89,6 @@ describe('logout', () => {
     expect.assertions(1);
     return store.dispatch(actions.logout()).then(() => {
       expect(store.getActions()).toEqual([loggedOut]);
-    });
-  });
-
-  test('clears cache', () => {
-    cache.clear = jest.fn();
-
-    expect.assertions(1);
-    return store.dispatch(actions.logout()).then(() => {
-      expect(cache.clear).toHaveBeenCalled();
     });
   });
 

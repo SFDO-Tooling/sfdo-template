@@ -12,11 +12,10 @@ Cloning the project
 Making a virtual env
 --------------------
 
-{{cookiecutter.project_name}} development requires Python v3.6. If ``which python3.6`` returns a
+{{cookiecutter.project_name}} development requires Python v3.7. If ``which python3.7`` returns a
 non-empty path, it's already installed and you can continue to the next step. If
-it returns nothing, then install Python v3.6 using
-``brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/f2a764ef944b1080be64bd88dca9a1d80130c558/Formula/python.rb``,
-or from `Python.org`_.
+it returns nothing, then install Python v3.7 using ``brew install python``, or
+from `Python.org`_.
 
 .. _Python.org: https://www.python.org/downloads/
 
@@ -25,7 +24,7 @@ temporarily for a particular "environment" or directory. We use
 `virtualenvwrapper`_. Assuming you're in the repo root, do the following to
 create a virtualenv (once you have `virtualenvwrapper`_ installed locally)::
 
-    mkvirtualenv {{cookiecutter.project_slug}} --python=$(which python3.6)
+    mkvirtualenv {{cookiecutter.project_slug}} --python=$(which python3.7)
     setvirtualenvproject
 
 Copy the ``.env`` file somewhere that will be sourced when you need it::
@@ -141,7 +140,7 @@ Development Tasks
   files
 - ``yarn prettier``: formats ``.scss`` and ``.js`` files
 - ``yarn eslint``: lints ``.js`` files
-- ``yarn flow``: runs JS type-checking 
+- ``yarn flow``: runs JS type-checking
 - ``yarn stylelint``: lints ``.scss`` files
 - ``yarn flake8``: lints ``.py`` files
 - ``yarn build``: builds development (unminified) static assets into ``dist/``
@@ -157,3 +156,31 @@ automatically prepended to commit messages):
 - 🛢 (``:oil_drum:``) -> ``python manage.py migrate``
 - 🐈 (``:cat2:``) -> ``yarn``
 - 🙀 (``:scream_cat:``) -> ``rm -rf node_modules/; bin/unpack-node; yarn``
+
+Internationalization
+--------------------
+
+To build and compile ``.mo`` and ``.po`` files for the backend, run::
+
+   $ python manage.py makemessages --locale <locale>
+   $ python manage.py compilemessages
+
+These commands require the `GNU gettext toolset`_ (``brew install gettext``).
+
+For the front-end, translation JSON files are served from
+``locales/<language>/`` directories, and the `user language is auto-detected at
+runtime`_.
+
+During development, strings are parsed automatically from the JS, and an English
+translation file is auto-generated to ``locales_dev/en/translation.json`` on
+every build (``yarn build`` or ``yarn serve``). When this file changes,
+translations must be copied over to the ``locales/en/translation.json`` file in
+order to have any effect.
+
+Strings with dynamic content (i.e. known only at runtime) cannot be
+automatically parsed, but will log errors while the app is running if they're
+missing from the served translation files. To resolve, add the missing key:value
+translations to ``locales/<language>/translation.json``.
+
+.. _GNU gettext toolset: https://www.gnu.org/software/gettext/
+.. _user language is auto-detected at runtime: https://github.com/i18next/i18next-browser-languageDetector

@@ -1,8 +1,7 @@
 // @flow
 
-import { cache } from 'utils/caching';
-
 import type { ThunkAction } from 'redux-thunk';
+
 import type { User } from 'user/reducer';
 
 type LoginAction = { type: 'USER_LOGGED_IN', payload: User };
@@ -14,7 +13,7 @@ export const login = (payload: User): LoginAction => {
     window.Raven.setUserContext(payload);
   }
   /* istanbul ignore else */
-  if (payload) {
+  if (payload && window.socket) {
     window.socket.subscribe({
       model: 'user',
       id: payload.id,
@@ -30,8 +29,10 @@ export const logout = (): ThunkAction => (dispatch, getState, { apiFetch }) =>
   apiFetch(window.api_urls.account_logout(), {
     method: 'POST',
   }).then(() => {
-    cache.clear();
-    window.socket.reconnect();
+    /* istanbul ignore else */
+    if (window.socket) {
+      window.socket.reconnect();
+    }
     if (window.Raven && window.Raven.isSetup()) {
       window.Raven.setUserContext();
     }
