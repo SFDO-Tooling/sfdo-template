@@ -5,7 +5,7 @@ from rest_framework import pagination, permissions, serializers, viewsets
 from rest_framework.response import Response
 
 
-class IsAPIUser(permissions.BasePermission):
+class IsAPIUser(permissions.BasePermission):  # pragma: nocover
     """Permission check for API permission.
 
     (Currently just checks if user is a superuser.)
@@ -15,7 +15,7 @@ class IsAPIUser(permissions.BasePermission):
         return request.user.is_superuser
 
 
-class AdminAPISerializer(serializers.HyperlinkedModelSerializer):
+class AdminAPISerializer(serializers.HyperlinkedModelSerializer):  # pragma: nocover
     """Custom serializer to make sure we link to /admin/rest/ routes
     rather than the public /api/
     """
@@ -51,7 +51,7 @@ class AdminAPISerializer(serializers.HyperlinkedModelSerializer):
         return field_class, field_kwargs
 
 
-class AdminAPIPagination(pagination.LimitOffsetPagination):
+class AdminAPIPagination(pagination.LimitOffsetPagination):  # pragma: nocover
     """Custom pagination to keep links separate from data"""
 
     default_limit = 10
@@ -75,7 +75,7 @@ class AdminAPIPagination(pagination.LimitOffsetPagination):
 
 @method_decorator(never_cache, name="list")
 @method_decorator(never_cache, name="retrieve")
-class AdminAPIViewSet(viewsets.ModelViewSet):
+class AdminAPIViewSet(viewsets.ModelViewSet):  # pragma: nocover
     model_app_label = "api"
     model_name = None
     serializer_base = AdminAPISerializer

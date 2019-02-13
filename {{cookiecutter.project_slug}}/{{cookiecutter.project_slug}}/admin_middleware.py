@@ -6,7 +6,7 @@ from django.core.exceptions import SuspiciousOperation
 from .utils import get_remote_ip
 
 
-class AdminRestrictMiddleware:
+class AdminRestrictMiddleware:  # pragma: nocover
     """
     A middleware that restricts all access to the admin prefix to allowed IPs.
     """

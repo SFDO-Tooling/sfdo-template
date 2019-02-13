@@ -1,7 +1,7 @@
 from rest_framework import routers
 
 
-def _get_api_basename(viewset):
+def _get_api_basename(viewset):  # pragma: nocover
     return viewset.model_name.lower()
 
 
