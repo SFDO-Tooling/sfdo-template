@@ -1,6 +1,6 @@
 // @flow
 
-import type { UserAction } from 'user/actions';
+import type { UserAction } from 'store/user/actions';
 
 export type User = {
   +id: string,

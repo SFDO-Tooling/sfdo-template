@@ -1,10 +1,15 @@
 from unittest import mock
 
+import pytest
+from django.core.exceptions import SuspiciousOperation
+
+from {{cookiecutter.project_slug}}.utils import fernet_decrypt, fernet_encrypt
+
 from ..views import (
     LoggingOAuth2CallbackView,
     LoggingOAuth2LoginView,
     SalesforceOAuth2CustomAdapter,
-    SaveInstanceUrlMixin,
+    SalesforceOAuth2Mixin,
 )
 
 
@@ -15,13 +20,19 @@ def test_SalesforceOAuth2CustomAdapter_base_url(rf):
     assert adapter.base_url == "https://foo.my.salesforce.com"
 
 
-class TestSaveInstanceUrlMixin:
+class TestSalesforceOAuth2Mixin:
     def test_complete_login(self, mocker, rf):
         # This is a mess of terrible mocking and I do not like it.
         # This is really just to exercise the mixin, and confirm that it
         # assigns instance_url
-        mocker.patch("requests.get")
-        adapter = SaveInstanceUrlMixin()
+        get = mocker.patch("requests.get")
+        userinfo_mock = mock.MagicMock()
+        userinfo_mock.json.return_value = {
+            "organization_id": "00D000000000001EAA",
+            "urls": mock.MagicMock(),
+        }
+        get.side_effect = [userinfo_mock, mock.MagicMock(), mock.MagicMock()]
+        adapter = SalesforceOAuth2Mixin()
         adapter.userinfo_url = None
         adapter.get_provider = mock.MagicMock()
         slfr = mock.MagicMock()
@@ -31,11 +42,25 @@ class TestSaveInstanceUrlMixin:
         adapter.get_provider.return_value = prov_ret
         request = rf.get("/")
         request.session = {"socialaccount_state": (None, "some-verifier")}
+        token = mock.MagicMock()
+        token.token = fernet_encrypt("token")
 
         ret = adapter.complete_login(
-            request, None, None, response={"instance_url": "https://example.com"}
+            request, None, token, response={"instance_url": "https://example.com"}
         )
         assert ret.account.extra_data["instance_url"] == "https://example.com"
+
+    def test_parse_token(self):
+        adapter = SalesforceOAuth2CustomAdapter(request=None)
+        data = {"access_token": "token", "refresh_token": "token"}
+
+        token = adapter.parse_token(data)
+        assert "token" == fernet_decrypt(token.token)
+
+    def test_validate_org_id__invalid(self):
+        adapter = SalesforceOAuth2Mixin()
+        with pytest.raises(SuspiciousOperation):
+            adapter._validate_org_id("bogus")
 
 
 class TestLoggingOAuth2LoginView:

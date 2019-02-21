@@ -26,10 +26,10 @@ import Footer from 'components/footer';
 import FourOhFour from 'components/404';
 import Header from 'components/header';
 import getApiFetch from 'utils/api';
-import reducer from 'app/reducer';
+import reducer from 'store';
 import { createSocket } from 'utils/websockets';
 import { logError } from 'utils/logging';
-import { login } from 'user/actions';
+import { login } from 'store/user/actions';
 import { routePatterns } from 'utils/routes';
 
 const SF_logo = require('images/salesforce-logo.png');

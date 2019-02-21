@@ -6,6 +6,8 @@ from pytest_factoryboy import register
 # import pytest
 # from rest_framework.test import APIClient
 
+from {{cookiecutter.project_slug}}.utils import fernet_encrypt
+
 User = get_user_model()
 
 
@@ -25,8 +27,8 @@ class SocialTokenFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = SocialToken
 
-    token = "0123456789abcdef"
-    token_secret = "secret.0123456789abcdef"
+    token = fernet_encrypt("0123456789abcdef")
+    token_secret = fernet_encrypt("secret.0123456789abcdef")
     app = factory.SubFactory(SocialAppFactory)
 
 

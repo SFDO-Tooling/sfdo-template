@@ -1,8 +1,8 @@
 import fetchMock from 'fetch-mock';
 
-import { storeWithApi } from './../utils';
+import { storeWithApi } from './../../utils';
 
-import * as actions from 'user/actions';
+import * as actions from 'store/user/actions';
 
 describe('login', () => {
   beforeEach(() => {

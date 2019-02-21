@@ -3,6 +3,8 @@ from django.contrib.auth.models import UserManager as BaseUserManager
 from django.db import models
 from hashid_field import HashidAutoField
 
+from {{cookiecutter.project_slug}}.utils import fernet_decrypt
+
 
 class HashIdMixin(models.Model):
     class Meta:
@@ -41,7 +43,7 @@ class User(HashIdMixin, AbstractUser):
         account = self.social_account
         if account and account.socialtoken_set.exists():
             token = self.social_account.socialtoken_set.first()
-            return (token.token, token.token_secret)
+            return (fernet_decrypt(token.token), fernet_decrypt(token.token_secret))
         return (None, None)
 
     @property

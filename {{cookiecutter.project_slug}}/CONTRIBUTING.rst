@@ -32,8 +32,15 @@ Copy the ``.env`` file somewhere that will be sourced when you need it::
     cp env.example $VIRTUAL_ENV/bin/postactivate
 
 Edit this file to change ``DJANGO_SECRET_KEY`` and ``DJANGO_HASHID_SALT`` to any
-two different arbitrary string values.
-{%- if cookiecutter.use_bucketeer_aws_for_file_storage == 'y' %} Additionally, add the following environment variables::
+two different arbitrary string values. Also set ``DB_ENCRYPTION_KEY``::
+
+    python manage.py shell
+    from cryptography.fernet import Fernet
+    Fernet.generate_key()
+
+{%- if cookiecutter.use_bucketeer_aws_for_file_storage == 'y' %}
+
+Finally, add the following environment variables::
 
     export BUCKETEER_AWS_ACCESS_KEY_ID=...
     export BUCKETEER_AWS_SECRET_ACCESS_KEY=...

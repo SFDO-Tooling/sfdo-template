@@ -3,7 +3,7 @@
 import Sockette from 'sockette';
 import type { Dispatch } from 'redux-thunk';
 
-import { connectSocket, disconnectSocket } from 'socket/actions';
+import { connectSocket, disconnectSocket } from 'store/socket/actions';
 import { log } from 'utils/logging';
 
 type SubscriptionEvent = {|

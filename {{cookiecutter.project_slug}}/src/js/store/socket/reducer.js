@@ -1,6 +1,6 @@
 // @flow
 
-import type { SocketAction } from 'socket/actions';
+import type { SocketAction } from 'store/socket/actions';
 
 export type Socket = boolean;
 
