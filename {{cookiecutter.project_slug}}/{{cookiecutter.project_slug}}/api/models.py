@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
 from django.db import models
 from hashid_field import HashidAutoField
-
 from sfdo_template_helpers.crypto import fernet_decrypt
 
 

@@ -11,7 +11,6 @@ from allauth.socialaccount.providers.salesforce.views import (
 )
 from allauth.utils import get_request_param
 from django.core.exceptions import SuspiciousOperation
-
 from sfdo_template_helpers.crypto import fernet_decrypt, fernet_encrypt
 
 from .provider import (
@@ -59,7 +58,9 @@ class SalesforceOAuth2ProductionAdapter(
     provider_id = SalesforceProductionProvider.id
 
 
-class SalesforceOAuth2SandboxAdapter(SalesforceOAuth2Mixin, SalesforceOAuth2BaseAdapter):
+class SalesforceOAuth2SandboxAdapter(
+    SalesforceOAuth2Mixin, SalesforceOAuth2BaseAdapter
+):
     provider_id = SalesforceTestProvider.id
 
 
