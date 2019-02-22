@@ -27,6 +27,10 @@ create a virtualenv (once you have `virtualenvwrapper`_ installed locally)::
     mkvirtualenv {{cookiecutter.project_slug}} --python=$(which python3.7)
     setvirtualenvproject
 
+Install Python requirements::
+
+    pip install -r requirements/local.txt
+
 Copy the ``.env`` file somewhere that will be sourced when you need it::
 
     cp env.example $VIRTUAL_ENV/bin/postactivate
@@ -57,13 +61,6 @@ instead of any system-wide Node you may have.
 (``workon {{cookiecutter.project_slug}}``).**
 
 .. _virtualenvwrapper: https://virtualenvwrapper.readthedocs.io/en/latest/
-
-Installing Python requirements
-------------------------------
-
-::
-
-    pip install -r requirements/local.txt
 
 Installing JavaScript requirements
 ----------------------------------
