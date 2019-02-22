@@ -3,7 +3,7 @@ from unittest import mock
 import pytest
 from django.core.exceptions import SuspiciousOperation
 
-from {{cookiecutter.project_slug}}.utils import fernet_decrypt, fernet_encrypt
+from sfdo_template_helpers.crypto import fernet_decrypt, fernet_encrypt
 
 from ..views import (
     LoggingOAuth2CallbackView,

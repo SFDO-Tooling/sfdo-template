@@ -6,7 +6,7 @@ from pytest_factoryboy import register
 # import pytest
 # from rest_framework.test import APIClient
 
-from {{cookiecutter.project_slug}}.utils import fernet_encrypt
+from sfdo_template_helpers.crypto import fernet_encrypt
 
 User = get_user_model()
 
