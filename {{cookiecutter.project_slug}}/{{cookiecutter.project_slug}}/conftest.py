@@ -2,9 +2,11 @@ import factory
 from allauth.socialaccount.models import SocialAccount, SocialApp, SocialToken
 from django.contrib.auth import get_user_model
 from pytest_factoryboy import register
+from sfdo_template_helpers.crypto import fernet_encrypt
 
 # import pytest
 # from rest_framework.test import APIClient
+
 
 User = get_user_model()
 
@@ -25,8 +27,8 @@ class SocialTokenFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = SocialToken
 
-    token = "0123456789abcdef"
-    token_secret = "secret.0123456789abcdef"
+    token = fernet_encrypt("0123456789abcdef")
+    token_secret = fernet_encrypt("secret.0123456789abcdef")
     app = factory.SubFactory(SocialAppFactory)
 
 

@@ -16,7 +16,7 @@
   "Use Custom Domain": "Use Custom Domain",
   "Welcome to {{cookiecutter.project_name}}!": "Welcome to {{cookiecutter.project_name}}!",
   "You are in offline mode. We are trying to reconnect, but you may need to": "You are in offline mode. We are trying to reconnect, but you may need to",
-  "anErrorOccurred": "An error occured. Try the <1>home page</1>?",
+  "anErrorOccurred": "An error occurred. Try the <1>home page</1>?",
   "errorWithAccount": "An error occurred with your account. Try the <2>home page</2>?",
   "pageCannotBeFound": "That page cannot be found. Try the <2>home page</2>?",
   "reload the page.": "reload the page."

@@ -3,10 +3,10 @@
 import { combineReducers } from 'redux';
 import type { CombinedReducer } from 'redux';
 
-import socketReducer from 'socket/reducer';
-import userReducer from 'user/reducer';
-import type { Socket } from 'socket/reducer';
-import type { User } from 'user/reducer';
+import socketReducer from 'store/socket/reducer';
+import userReducer from 'store/user/reducer';
+import type { Socket } from 'store/socket/reducer';
+import type { User } from 'store/user/reducer';
 
 export type AppState = {
   +user: User,
