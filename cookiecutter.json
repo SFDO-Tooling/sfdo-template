@@ -15,6 +15,6 @@
         "Apache Software License 2.0"
     ],
     "use_bucketeer_aws_for_file_storage": "y",
-    "node_version": "10.15.3",
-    "yarn_version": "1.13.0"
+    "node_version": "lts",
+    "yarn_version": "latest"
 }
