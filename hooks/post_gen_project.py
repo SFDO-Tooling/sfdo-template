@@ -7,6 +7,7 @@ Does the following:
 import os
 import platform
 import json
+
 # We have this because of cookiecutter:
 import requests
 
@@ -34,8 +35,8 @@ def remove_copying_files():
     remove_files(["COPYING"])
 
 
-use_gplv3 = '{{ cookiecutter.open_source_license }}' == 'GPLv3'
-not_oss = '{{ cookiecutter.open_source_license }}' == 'Not open source'
+use_gplv3 = "{{ cookiecutter.open_source_license }}" == "GPLv3"
+not_oss = "{{ cookiecutter.open_source_license }}" == "Not open source"
 
 # 1. Removes files needed for the GPLv3 license if it isn't going to be used.
 if not use_gplv3:
@@ -47,8 +48,7 @@ def get_node_lts():
     res = requests.get(url)
     version = [
         {"tag_name": v["tag_name"], "name": v["name"]}
-        for v
-        in res.json()
+        for v in res.json()
         if "LTS" in v["name"]
     ]
     return version[0]["tag_name"].lstrip("v")
@@ -67,7 +67,7 @@ with open(package_json) as f:
     if data["engines"]["node"] == "lts":
         data["engines"]["node"] = get_node_lts()
     if data["engines"]["yarn"] == "latest":
-        data["engines"]["yarn"] = get_yarn_lts()
+        data["engines"]["yarn"] = get_yarn_latest()
 
-with open(package_json, 'w') as f:
+with open(package_json, "w") as f:
     json.dump(data, f, indent=2)
