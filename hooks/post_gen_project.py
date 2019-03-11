@@ -6,6 +6,7 @@ Does the following:
 """
 import os
 import platform
+import json
 # We have this because of cookiecutter:
 import requests
 
