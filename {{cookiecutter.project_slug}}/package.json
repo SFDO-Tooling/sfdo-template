@@ -14,8 +14,8 @@
     "url": "https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.project_slug}}.git"
   },
   "engines": {
-    "node": "10.15.0",
-    "yarn": "1.13.0"
+    "node": "{{ cookiecutter.node_version }}",
+    "yarn": "{{ cookiecutter.yarn_version }}"
   },
   "devDependencies": {
     "@babel/core": "^7.3.3",
