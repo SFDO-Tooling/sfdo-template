@@ -8,3 +8,6 @@ LOGGING["loggers"]["werkzeug"] = {
     "level": "DEBUG",
     "propagate": True,
 }
+
+# Make sure we default to no HSTS when running locally
+SECURE_HSTS_SECONDS = env("SECURE_HSTS_SECONDS", default=0, type_=int)
