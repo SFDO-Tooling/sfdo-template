@@ -38,3 +38,24 @@ export const logout = (): ThunkAction => (dispatch, getState, { apiFetch }) =>
     }
     return dispatch({ type: 'USER_LOGGED_OUT' });
   });
+
+export const refetchAllData = (): ThunkAction => (
+  dispatch,
+  getState,
+  { apiFetch },
+) => {
+  dispatch({ type: 'REFETCH_DATA_STARTED' });
+  return apiFetch(window.api_urls.user())
+    .then(payload => {
+      dispatch({ type: 'REFETCH_DATA_SUCCEEDED' });
+      dispatch({ type: 'USER_LOGGED_OUT' });
+      if (!payload) {
+        return null;
+      }
+      return dispatch(login(payload));
+    })
+    .catch(err => {
+      dispatch({ type: 'REFETCH_DATA_FAILED' });
+      throw err;
+    });
+};

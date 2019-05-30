@@ -13,10 +13,17 @@ from ..views import (
 
 
 def test_SalesforceOAuth2CustomAdapter_base_url(rf):
-    request = rf.get("/?custom_domain=foo")
+    request = rf.get("/?custom_domain=foo-bar.baz")
     request.session = {}
     adapter = SalesforceOAuth2CustomAdapter(request)
-    assert adapter.base_url == "https://foo.my.salesforce.com"
+    assert adapter.base_url == "https://foo-bar.baz.my.salesforce.com"
+
+
+def test_SalesforceOAuth2CustomAdapter__invalid_domain(rf):
+    request = rf.get("/?custom_domain=google.com?-")
+    request.session = {}
+    with pytest.raises(SuspiciousOperation):
+        SalesforceOAuth2CustomAdapter(request).base_url
 
 
 class TestSalesforceOAuth2Mixin:
@@ -64,8 +71,12 @@ class TestSalesforceOAuth2Mixin:
 
 class TestLoggingOAuth2LoginView:
     def test_dispatch(self, rf, mocker):
-        mocker.patch("{{cookiecutter.project_slug}}.multisalesforce.views.OAuth2LoginView.dispatch")
-        logger = mocker.patch("{{cookiecutter.project_slug}}.multisalesforce.views.logger.info")
+        mocker.patch(
+            "{{cookiecutter.project_slug}}.multisalesforce.views.OAuth2LoginView.dispatch"
+        )
+        logger = mocker.patch(
+            "{{cookiecutter.project_slug}}.multisalesforce.views.logger.info"
+        )
         request = rf.get("/")
         request.session = {"socialaccount_state": (None, "some-verifier")}
 
@@ -76,8 +87,12 @@ class TestLoggingOAuth2LoginView:
 
 class TestLoggingOAuth2CallbackView:
     def test_dispatch(self, rf, mocker):
-        mocker.patch("{{cookiecutter.project_slug}}.multisalesforce.views.OAuth2CallbackView.dispatch")
-        logger = mocker.patch("{{cookiecutter.project_slug}}.multisalesforce.views.logger.info")
+        mocker.patch(
+            "{{cookiecutter.project_slug}}.multisalesforce.views.OAuth2CallbackView.dispatch"
+        )
+        logger = mocker.patch(
+            "{{cookiecutter.project_slug}}.multisalesforce.views.logger.info"
+        )
         request = rf.get("/")
         request.session = {"state": "some-verifier"}
 

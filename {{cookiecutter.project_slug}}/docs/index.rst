@@ -10,6 +10,7 @@ Welcome to {{cookiecutter.project_name}}'s documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   api/index
 
 
 Indices and tables

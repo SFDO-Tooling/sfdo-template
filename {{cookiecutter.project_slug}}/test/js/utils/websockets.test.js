@@ -92,6 +92,18 @@ describe('createSocket', () => {
       });
     });
 
+    describe('after reconnect', () => {
+      test('logs', () => {
+        socketInstance.onreconnect();
+        socketInstance.onreconnect();
+        socketInstance.onopen();
+
+        expect(window.console.info).toHaveBeenCalledWith(
+          '[WebSocket] reconnected',
+        );
+      });
+    });
+
     describe('onmessage', () => {
       test('logs', () => {
         socketInstance.onmessage({});
@@ -117,7 +129,7 @@ describe('createSocket', () => {
         socketInstance.onreconnect();
 
         expect(window.console.info).toHaveBeenCalledWith(
-          '[WebSocket] reconnecting…',
+          '[WebSocket] attempting to reconnect…',
         );
       });
     });

@@ -6,6 +6,7 @@ from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.utils.translation import gettext as _
 
 from .api.constants import CHANNELS_GROUP_NAME
+from .consumer_utils import clear_message_semaphore
 
 # from importlib import import_module
 
@@ -37,6 +38,8 @@ class PushNotificationConsumer(AsyncJsonWebsocketConsumer):
                 'content': json_message,
             })
         """
+        # Take lock out of redis for this message:
+        await clear_message_semaphore(self.channel_layer, event)
         if "content" in event:
             await self.send_json(event["content"])
             return

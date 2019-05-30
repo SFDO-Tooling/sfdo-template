@@ -40,7 +40,15 @@ class SocialAccountFactory(factory.django.DjangoModelFactory):
     provider = "salesforce-production"
     uid = factory.Sequence("https://example.com/{}".format)
     socialtoken_set = factory.RelatedFactory(SocialTokenFactory, "account")
-    extra_data = {"instance_url": "https://example.com"}
+    extra_data = {
+        "instance_url": "https://example.com",
+        "organization_details": {
+            "Id": "00Dxxxxxxxxxxxxxxx",
+            "Name": "Sample Org",
+            "OrganizationType": "Developer Edition",
+            "IsSandbox": False,
+        },
+    }
 
 
 @register
