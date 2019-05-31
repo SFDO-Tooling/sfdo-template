@@ -21,5 +21,7 @@ Retrieve
      "username": "user@domain.com",
      "email": "user@domain.com",
      "valid_token_for": "00Dxxxxxxxxxxxxxxx",
+     "org_name": "My SF Org",
+     "org_type": "Developer Edition",
      "is_staff": true
    }
