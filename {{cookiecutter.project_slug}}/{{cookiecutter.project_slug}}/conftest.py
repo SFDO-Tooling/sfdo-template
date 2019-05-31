@@ -4,8 +4,8 @@ from django.contrib.auth import get_user_model
 from pytest_factoryboy import register
 from sfdo_template_helpers.crypto import fernet_encrypt
 
-# import pytest
-# from rest_framework.test import APIClient
+import pytest
+from rest_framework.test import APIClient
 
 
 User = get_user_model()
@@ -60,6 +60,15 @@ class UserFactory(factory.django.DjangoModelFactory):
     username = factory.Sequence("user_{}@example.com".format)
     password = factory.PostGenerationMethodCall("set_password", "foobar")
     socialaccount_set = factory.RelatedFactory(SocialAccountFactory, "user")
+
+
+@pytest.fixture
+def client(user_factory):
+    user = user_factory()
+    client = APIClient()
+    client.force_login(user)
+    client.user = user
+    return client
 
 
 # @pytest.fixture

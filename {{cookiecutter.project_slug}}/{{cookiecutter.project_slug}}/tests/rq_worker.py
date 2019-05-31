@@ -4,7 +4,7 @@ import pytest
 from django.db import DatabaseError, InterfaceError
 from django_rq import get_worker
 
-from metadeploy.rq_worker import wrap_job_as_background_task
+from ..rq_worker import wrap_job_as_background_task
 
 
 def test_wrap_job_as_background_task(mocker):

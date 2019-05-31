@@ -221,9 +221,15 @@ SECURE_PROXY_SSL_HEADER = env(
     type_=(lambda v: tuple(v.split(":", 1)) if (v is not None and ":" in v) else None),
 )
 SECURE_SSL_REDIRECT = env("SECURE_SSL_REDIRECT", default=True, type_=boolish)
-SESSION_COOKIE_SECURE = env("SESSION_COOKIE_SECURE", default=SECURE_SSL_REDIRECT, type_=boolish)
-CSRF_COOKIE_SECURE = env("CSRF_COOKIE_SECURE", default=SECURE_SSL_REDIRECT, type_=boolish)
-SECURE_HSTS_SECONDS = env("SECURE_HSTS_SECONDS", default=3600 if SECURE_SSL_REDIRECT else 0, type_=int)
+SESSION_COOKIE_SECURE = env(
+    "SESSION_COOKIE_SECURE", default=SECURE_SSL_REDIRECT, type_=boolish
+)
+CSRF_COOKIE_SECURE = env(
+    "CSRF_COOKIE_SECURE", default=SECURE_SSL_REDIRECT, type_=boolish
+)
+SECURE_HSTS_SECONDS = env(
+    "SECURE_HSTS_SECONDS", default=3600 if SECURE_SSL_REDIRECT else 0, type_=int
+)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env(
     "SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True, type_=boolish
 )
