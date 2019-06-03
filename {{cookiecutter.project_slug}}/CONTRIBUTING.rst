@@ -29,7 +29,7 @@ create a virtualenv (once you have `virtualenvwrapper`_ installed locally)::
 
 Install Python requirements::
 
-    pip install -r requirements/local.txt
+    pip install -Ur requirements/local.txt
 
 Copy the ``.env`` file somewhere that will be sourced when you need it::
 
@@ -41,6 +41,9 @@ two different arbitrary string values. Also set ``DB_ENCRYPTION_KEY``::
     python manage.py shell
     from cryptography.fernet import Fernet
     Fernet.generate_key()
+
+This will output a bytestring, e.g. ``b'mystring='``. Copy just the contents of
+``'...'``, e.g. ``export DB_ENCRYPTION_KEY='mystring='``.
 
 {%- if cookiecutter.use_bucketeer_aws_for_file_storage == 'y' %}
 
@@ -57,20 +60,20 @@ Your ``PATH`` (and environment variables) will be updated when you
 that whenever you are working on the project, you use the project-specific version of Node
 instead of any system-wide Node you may have.
 
-**All of the remaining steps assume that you have the virtualenv activated
-(``workon {{cookiecutter.project_slug}}``).**
+**All of the remaining steps assume that you have the virtualenv activated.**
+(``workon {{cookiecutter.project_slug}}``)
 
 .. _virtualenvwrapper: https://virtualenvwrapper.readthedocs.io/en/latest/
 
 Installing JavaScript requirements
 ----------------------------------
 
-The project-local version of `Node.js`_ is bundled with the repo and can be
-unpacked locally (in the git-ignored ``node/`` directory), so you don't have to
-install it system-wide (and possibly conflict with other projects wanting other
-Node versions).
+The project-local version of `Node.js`_ can be downloaded and unpacked locally
+(in the git-ignored ``node/`` directory), so you don't have to install it
+system-wide (and possibly conflict with other projects wanting other Node
+versions).
 
-To install the project-local version of Node (and `yarn`_)::
+To download and install the project-local version of Node (and `yarn`_)::
 
     bin/unpack-node
 
@@ -117,7 +120,7 @@ Logging in with Salesforce
 --------------------------
 
 To setup the Salesforce OAuth integration, run the ``populate_social_apps``
-management command. The values to use in place of the ``XXX` and ``YYY`` flags
+management command. The values to use in place of the ``XXX`` and ``YYY`` flags
 can be found on the Connected App you've made in your Salesforce configuration::
 
     python manage.py populate_social_apps --prod-id XXX --prod-secret YYY
@@ -159,7 +162,6 @@ automatically prepended to commit messages):
 - 📦 (``:package:``) -> ``pip install -r requirements/local.txt``
 - 🛢 (``:oil_drum:``) -> ``python manage.py migrate``
 - 🐈 (``:cat2:``) -> ``yarn``
-- 🙀 (``:scream_cat:``) -> ``rm -rf node_modules/; bin/unpack-node; yarn``
 
 Internationalization
 --------------------

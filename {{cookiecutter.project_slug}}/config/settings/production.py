@@ -7,3 +7,7 @@ TEMPLATES[0]["DIRS"] = [
     str(PROJECT_ROOT / "dist" / "prod"),
     str(PROJECT_ROOT / "templates"),
 ]
+
+RQ = {
+    "WORKER_CLASS": "{{cookiecutter.project_slug}}.rq_worker.ConnectionClosingHerokuWorker"
+}

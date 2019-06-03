@@ -1,7 +1,7 @@
-web: newrelic-admin run-program daphne --bind 0.0.0.0 --port $PORT {{cookiecutter.project_slug}}.asgi:application
-worker: newrelic-admin run-python manage.py rqworker default short
-scheduler: newrelic-admin run-python manage.py rqscheduler default short
-worker_default: newrelic-admin run-python manage.py rqworker default
-worker_short: newrelic-admin run-python manage.py rqworker short
+web: daphne --bind 0.0.0.0 --port $PORT {{cookiecutter.project_slug}}.asgi:application
+worker: python manage.py rqworker default short
+scheduler: python manage.py rqscheduler default short
+worker_default: python manage.py rqworker default
+worker_short: python manage.py rqworker short
 dev_worker: honcho start -f Procfile_dev_worker
 release: python manage.py migrate --noinput

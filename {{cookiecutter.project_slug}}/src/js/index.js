@@ -28,8 +28,8 @@ import Header from 'components/header';
 import getApiFetch from 'utils/api';
 import reducer from 'store';
 import { createSocket } from 'utils/websockets';
-import { logError } from 'utils/logging';
-import { login } from 'store/user/actions';
+import { log, logError } from 'utils/logging';
+import { login, refetchAllData } from 'store/user/actions';
 import { routePatterns } from 'utils/routes';
 
 const SF_logo = require('images/salesforce-logo.png');
@@ -39,7 +39,9 @@ const Home = () => (
     className="slds-text-longform
       slds-p-around_x-large"
   >
-    <h1 className="slds-text-heading_large">{t('Welcome to {{cookiecutter.project_name}}!')}</h1>
+    <h1 className="slds-text-heading_large">
+      {t('Welcome to {{cookiecutter.project_name}}!')}
+    </h1>
     <p>{t('This is sample intro text, where your content might live.')}</p>
   </div>
 );
@@ -71,7 +73,10 @@ const App = () => (
   </DocumentTitle>
 );
 
-init_i18n(() => {
+init_i18n(i18nError => {
+  if (i18nError) {
+    log(i18nError);
+  }
   const el = document.getElementById('app');
   if (el) {
     // Create store
@@ -94,6 +99,11 @@ init_i18n(() => {
     window.socket = createSocket({
       url: `${protocol}//${host}${window.api_urls.ws_notifications()}`,
       dispatch: appStore.dispatch,
+      options: {
+        onreconnect: () => {
+          appStore.dispatch(refetchAllData());
+        },
+      },
     });
 
     // Get JS globals

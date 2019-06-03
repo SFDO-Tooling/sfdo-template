@@ -19,34 +19,42 @@ import type { User } from 'store/user/reducer';
 
 type Props = {
   user: User,
-  doLogout: typeof logout,
   socket: Socket,
+  doLogout: typeof logout,
 };
 
-const Header = ({ user, doLogout, socket }: Props) => (
-  <>
-    {socket ? null : <OfflineAlert />}
-    <PageHeader
-      className="global-header
-        slds-p-horizontal_x-large
-        slds-p-vertical_medium"
-      title={
-        <Link
-          to={routes.home()}
-          className="slds-page-header__title
-            slds-text-heading_large
-            slds-text-link_reset"
-        >
-          <span>{t('{{cookiecutter.project_name}}')}</span>
-        </Link>
-      }
-      navRight={
-        <>{user ? <Logout user={user} doLogout={doLogout} /> : <Login />}</>
-      }
-      variant="objectHome"
-    />
-  </>
-);
+class Header extends React.Component<Props> {
+  controls = () => {
+    const { user, doLogout } = this.props;
+    return user ? <Logout user={user} doLogout={doLogout} /> : <Login />;
+  };
+
+  render() {
+    const { socket } = this.props;
+    return (
+      <>
+        {socket ? null : <OfflineAlert />}
+        <PageHeader
+          className="global-header
+            slds-p-horizontal_x-large
+            slds-p-vertical_medium"
+          title={
+            <Link
+              to={routes.home()}
+              className="slds-page-header__title
+                slds-text-heading_large
+                slds-text-link_reset"
+            >
+              <span>{t('{{cookiecutter.project_name}}')}</span>
+            </Link>
+          }
+          onRenderControls={this.controls}
+          variant="object-home"
+        />
+      </>
+    );
+  }
+}
 
 const select = (appState: AppState) => ({
   user: selectUserState(appState),

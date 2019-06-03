@@ -221,9 +221,15 @@ SECURE_PROXY_SSL_HEADER = env(
     type_=(lambda v: tuple(v.split(":", 1)) if (v is not None and ":" in v) else None),
 )
 SECURE_SSL_REDIRECT = env("SECURE_SSL_REDIRECT", default=True, type_=boolish)
-SESSION_COOKIE_SECURE = env("SESSION_COOKIE_SECURE", default=SECURE_SSL_REDIRECT, type_=boolish)
-CSRF_COOKIE_SECURE = env("CSRF_COOKIE_SECURE", default=SECURE_SSL_REDIRECT, type_=boolish)
-SECURE_HSTS_SECONDS = env("SECURE_HSTS_SECONDS", default=3600 if SECURE_SSL_REDIRECT else 0, type_=int)
+SESSION_COOKIE_SECURE = env(
+    "SESSION_COOKIE_SECURE", default=SECURE_SSL_REDIRECT, type_=boolish
+)
+CSRF_COOKIE_SECURE = env(
+    "CSRF_COOKIE_SECURE", default=SECURE_SSL_REDIRECT, type_=boolish
+)
+SECURE_HSTS_SECONDS = env(
+    "SECURE_HSTS_SECONDS", default=3600 if SECURE_SSL_REDIRECT else 0, type_=int
+)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env(
     "SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True, type_=boolish
 )
@@ -256,7 +262,8 @@ AWS_SECRET_ACCESS_KEY = env(
 )
 AWS_STORAGE_BUCKET_NAME = env(
     "BUCKETEER_BUCKET_NAME", default=env("AWS_BUCKET_NAME", default=None)
-){% endif %}
+)
+AWS_DEFAULT_ACL = None{% endif %}
 
 
 # Static files (CSS, JavaScript, Images)
@@ -356,26 +363,37 @@ LOGGING = {
         "job_id": {"()": "{{cookiecutter.project_slug}}.logfmt.JobIDFilter"},
     },
     "formatters": {
-        "verbose": {
+        "logfmt": {
             "()": "{{cookiecutter.project_slug}}.logfmt.LogfmtFormatter",
             "format": (
                 "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d "
                 "%(message)s"
             ),
-        }
+        },
+        "simple": {
+            "()": "django.utils.log.ServerFormatter",
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
     },
     "handlers": {
+        "console_error": {
+            "level": "ERROR",
+            "class": "logging.StreamHandler",
+            "filters": ["request_id"],
+            "formatter": "simple",
+        },
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
             "filters": ["request_id"],
-            "formatter": "verbose",
+            "formatter": "logfmt",
         },
         "rq_console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
             "filters": ["job_id"],
-            "formatter": "verbose",
+            "formatter": "logfmt",
         },
     },
     "loggers": {
@@ -385,6 +403,11 @@ LOGGING = {
             "propagate": False,
         },
         "django.server": {"handlers": ["console"], "level": "INFO", "propagate": False},
+        "django.request": {
+            "handlers": ["console_error"],
+            "level": "INFO",
+            "propagate": False,
+        },
         "rq.worker": {"handlers": ["rq_console"], "level": "DEBUG"},
         "{{cookiecutter.project_slug}}.multisalesforce": {"handlers": ["console"], "level": "DEBUG"},
         "{{cookiecutter.project_slug}}.logging_middleware": {
