@@ -20,11 +20,11 @@ const ErrorToast = ({
   doRemoveError: removeError,
 }) => (
   <Toast
-    labels={{
+    labels={% raw %}{{
       heading: i18n.t("Uh oh, we've encountered an error. You may need to "),
       headingLink: i18n.t('reload the page.'),
       details: error.message,
-    }}
+    }}{% endraw %}
     variant="error"
     onClickHeadingLink={reloadPage}
     onRequestClose={() => doRemoveError(error.id)}
