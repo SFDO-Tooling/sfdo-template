@@ -17,11 +17,7 @@ class HashIdMixin(models.Model):
     id = HashidAutoField(primary_key=True)
 
 
-class UserQuerySet(models.QuerySet):
-    pass
-
-
-class UserManager(BaseUserManager.from_queryset(UserQuerySet)):
+class UserManager(BaseUserManager):
     pass
 
 

@@ -2,6 +2,7 @@
 
 import type { ThunkAction } from 'redux-thunk';
 
+import apiFetch from 'utils/api';
 import type { User } from 'store/user/reducer';
 
 type LoginAction = { type: 'USER_LOGGED_IN', payload: User };
@@ -25,8 +26,8 @@ export const login = (payload: User): LoginAction => {
   };
 };
 
-export const logout = (): ThunkAction => (dispatch, getState, { apiFetch }) =>
-  apiFetch(window.api_urls.account_logout(), {
+export const logout = (): ThunkAction => dispatch =>
+  apiFetch(window.api_urls.account_logout(), dispatch, {
     method: 'POST',
   }).then(() => {
     /* istanbul ignore else */
@@ -39,13 +40,9 @@ export const logout = (): ThunkAction => (dispatch, getState, { apiFetch }) =>
     return dispatch({ type: 'USER_LOGGED_OUT' });
   });
 
-export const refetchAllData = (): ThunkAction => (
-  dispatch,
-  getState,
-  { apiFetch },
-) => {
+export const refetchAllData = (): ThunkAction => dispatch => {
   dispatch({ type: 'REFETCH_DATA_STARTED' });
-  return apiFetch(window.api_urls.user())
+  return apiFetch(window.api_urls.user(), dispatch, {}, [401, 403, 404])
     .then(payload => {
       dispatch({ type: 'REFETCH_DATA_SUCCEEDED' });
       dispatch({ type: 'USER_LOGGED_OUT' });

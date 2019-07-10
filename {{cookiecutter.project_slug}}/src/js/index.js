@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import DocumentTitle from 'react-document-title';
 import IconSettings from '@salesforce/design-system-react/components/icon-settings';
+import i18n from 'i18next';
 import logger from 'redux-logger';
 import settings from '@salesforce/design-system-react/components/settings';
 import thunk from 'redux-thunk';
@@ -11,7 +12,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { t } from 'i18next';
 import actionSprite from '@salesforce-ux/design-system/assets/icons/action-sprite/svg/symbols.svg';
 import customSprite from '@salesforce-ux/design-system/assets/icons/custom-sprite/svg/symbols.svg';
 import doctypeSprite from '@salesforce-ux/design-system/assets/icons/doctype-sprite/svg/symbols.svg';
@@ -25,7 +25,6 @@ import ErrorBoundary from 'components/error';
 import Footer from 'components/footer';
 import FourOhFour from 'components/404';
 import Header from 'components/header';
-import getApiFetch from 'utils/api';
 import reducer from 'store';
 import { createSocket } from 'utils/websockets';
 import { log, logError } from 'utils/logging';
@@ -40,14 +39,14 @@ const Home = () => (
       slds-p-around_x-large"
   >
     <h1 className="slds-text-heading_large">
-      {t('Welcome to {{cookiecutter.project_name}}!')}
+      {i18n.t('Welcome to {{cookiecutter.project_name}}!')}
     </h1>
-    <p>{t('This is sample intro text, where your content might live.')}</p>
+    <p>{i18n.t('This is sample intro text, where your content might live.')}</p>
   </div>
 );
 
 const App = () => (
-  <DocumentTitle title={t('{{cookiecutter.project_name}}')}>
+  <DocumentTitle title={i18n.t('{{cookiecutter.project_name}}')}>
     <div
       className="slds-grid
         slds-grid_frame
@@ -83,14 +82,7 @@ init_i18n(i18nError => {
     const appStore = createStore(
       reducer,
       {},
-      composeWithDevTools(
-        applyMiddleware(
-          thunk.withExtraArgument({
-            apiFetch: getApiFetch(),
-          }),
-          logger,
-        ),
-      ),
+      composeWithDevTools(applyMiddleware(thunk, logger)),
     );
 
     // Connect to WebSocket server

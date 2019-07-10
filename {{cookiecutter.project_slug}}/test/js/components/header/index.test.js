@@ -1,13 +1,13 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 
 import { renderWithRedux } from './../../utils';
 
 import Header from 'components/header';
 
 describe('<Header />', () => {
-  const setup = (initialState = { user: null, socket: false }) => {
+  const setup = (initialState = { user: null, socket: false, errors: [] }) => {
     const {
       container,
       getByLabelText,
