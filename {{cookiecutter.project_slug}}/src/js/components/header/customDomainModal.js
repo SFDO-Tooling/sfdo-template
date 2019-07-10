@@ -45,7 +45,11 @@ class CustomDomainModal extends React.Component<Props, { url: string }> {
 
   render(): React.Node {
     const footer = [
-      <Button key="cancel" label={i18n.t('Cancel')} onClick={this.handleClose} />,
+      <Button
+        key="cancel"
+        label={i18n.t('Cancel')}
+        onClick={this.handleClose}
+      />,
       <Button
         key="submit"
         label={i18n.t('Continue')}

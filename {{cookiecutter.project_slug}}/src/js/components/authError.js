@@ -16,7 +16,9 @@ import type { InitialProps } from 'components/utils';
 import type { User as UserType } from 'store/user/reducer';
 
 const AuthError = ({ user }: { user: UserType }) => (
-  <DocumentTitle title={`${i18n.t('Authentication Error')} | ${i18n.t('{{cookiecutter.project_name}}')}`}>
+  <DocumentTitle
+    title={`${i18n.t('Authentication Error')} | ${i18n.t('{{cookiecutter.project_name}}')}`}
+  >
     <>
       <EmptyIllustration
         message={
@@ -29,7 +31,9 @@ const AuthError = ({ user }: { user: UserType }) => (
       <div className="slds-align_absolute-center">
         <Login
           id="auth-error-login"
-          label={user ? i18n.t('Log In With a Different Org') : i18n.t('Log In')}
+          label={
+            user ? i18n.t('Log In With a Different Org') : i18n.t('Log In')
+          }
           buttonClassName="slds-p-horizontal_xxx-small"
           buttonVariant="base"
         />
