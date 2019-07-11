@@ -16,7 +16,7 @@ factory_boy==2.12.0
 # Linting:
 black==19.3b0
 doc8==0.8.0
-flake8==3.7.7
+flake8==3.7.8
 isort==4.3.21
 
 # Docs:

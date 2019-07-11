@@ -5,6 +5,9 @@ extends: stylelint-config-recommended-scss
 
 ignoreFiles:
   - '**/*.js'
+  - '**/*.jsx'
+  - '**/*.ts'
+  - '**/*.tsx'
 
 rules:
   # possible errors (these are all on by default)

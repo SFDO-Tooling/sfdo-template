@@ -1,8 +1,8 @@
 import fetchMock from 'fetch-mock';
 
-import { storeWithApi } from './../../utils';
+import * as actions from '@/store/user/actions';
 
-import * as actions from 'store/user/actions';
+import { storeWithApi } from './../../utils';
 
 describe('login', () => {
   beforeEach(() => {
@@ -128,7 +128,6 @@ describe('refetchAllData', () => {
       fetchMock.getOnce(window.api_urls.user(), user);
       const started = { type: 'REFETCH_DATA_STARTED' };
       const succeeded = { type: 'REFETCH_DATA_SUCCEEDED' };
-      const loggedOut = { type: 'USER_LOGGED_OUT' };
       const loggedIn = {
         type: 'USER_LOGGED_IN',
         payload: user,
@@ -139,7 +138,6 @@ describe('refetchAllData', () => {
         expect(store.getActions()).toEqual([
           started,
           succeeded,
-          loggedOut,
           loggedIn,
         ]);
       });

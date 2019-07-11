@@ -1,6 +1,7 @@
-import 'isomorphic-fetch';
 import '@testing-library/jest-dom/extend-expect';
 import '@testing-library/react/cleanup-after-each';
+import 'isomorphic-fetch';
+
 import fetchMock from 'fetch-mock';
 
 beforeAll(() => {
@@ -18,6 +19,7 @@ beforeAll(() => {
     salesforce_production_login: () => '/accounts/salesforce-production/login/',
     salesforce_test_login: () => '/accounts/salesforce-test/login/',
     user: () => '/api/user/',
+    object_list: () => '/api/objects/',
   };
   window.GLOBALS = {};
   window.console.error = jest.fn();

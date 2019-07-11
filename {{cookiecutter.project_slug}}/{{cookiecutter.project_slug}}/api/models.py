@@ -1,27 +1,19 @@
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
-from django.db import models
-from hashid_field import HashidAutoField
 from model_utils import Choices
 from sfdo_template_helpers.crypto import fernet_decrypt
 
+from . import model_mixins as mixins
 from .constants import ORGANIZATION_DETAILS
 
 ORG_TYPES = Choices("Production", "Scratch", "Sandbox", "Developer")
-
-
-class HashIdMixin(models.Model):
-    class Meta:
-        abstract = True
-
-    id = HashidAutoField(primary_key=True)
 
 
 class UserManager(BaseUserManager):
     pass
 
 
-class User(HashIdMixin, AbstractUser):
+class User(mixins.HashIdMixin, AbstractUser):
     objects = UserManager()
 
     def subscribable_by(self, user):
