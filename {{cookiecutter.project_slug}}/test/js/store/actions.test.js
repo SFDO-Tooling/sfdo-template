@@ -171,7 +171,7 @@ describe('fetchObject', () => {
       };
       const succeeded = {
         type: 'FETCH_OBJECT_SUCCEEDED',
-        payload: { filters, object: object, ...objectPayload },
+        payload: { filters, object, ...objectPayload },
       };
 
       expect.assertions(1);

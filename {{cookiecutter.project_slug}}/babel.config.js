@@ -20,7 +20,10 @@ module.exports = {
   ],
   env: {
     test: {
-      presets: [...presets, ['@babel/preset-env', { targets: { node: '{{ cookiecutter.node_version }}' } }]],
+      presets: [
+        ...presets,
+        ['@babel/preset-env', { targets: { node: 'current' } }],
+      ],
     },
   },
 };

@@ -1,5 +1,5 @@
-import i18n from 'i18next';
 import PageHeader from '@salesforce/design-system-react/components/page-header';
+import i18n from 'i18next';
 import React, { ComponentType } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';

@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.7.4
+      - image: circleci/python:3.7.3
     steps:
       - checkout
       - restore_cache:
@@ -49,7 +49,7 @@ jobs:
   lint:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.7.4
+      - image: circleci/python:3.7.3
     steps:
       - checkout
       - attach_workspace:
@@ -69,7 +69,7 @@ jobs:
   test-client:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.7.4
+      - image: circleci/python:3.7.3
     steps:
       - checkout
       - attach_workspace:
@@ -96,7 +96,7 @@ jobs:
   test-python:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.7.4
+      - image: circleci/python:3.7.3
         environment:
           BUCKETEER_AWS_ACCESS_KEY_ID: circle_test
           BUCKETEER_AWS_SECRET_ACCESS_KEY: circle_test
@@ -149,10 +149,10 @@ jobs:
           paths:
             - .coverage
 
-  report-test-coverage:
+  check-test-coverage:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.7.4
+      - image: circleci/python:3.7.3
     environment:
       COVERALLS_PARALLEL: true
     steps:
@@ -169,9 +169,13 @@ jobs:
           name: Report Test Coverage
           command: |
             . venv/bin/activate
-            yarn pytest:report-coverage
-            yarn test:report-coverage
-            curl -k "https://coveralls.io/webhook?repo_token=${COVERALLS_REPO_TOKEN}" -d "payload[build_num]=${CIRCLE_BUILD_NUM}&payload[status]=done"
+            if [[ -z "${COVERALLS_REPO_TOKEN}" ]]; then
+              echo ">> env var COVERALLS_REPO_TOKEN is not set; skipping test coverage reporting"
+            else
+              yarn pytest:report-coverage
+              yarn test:report-coverage
+              curl -k "https://coveralls.io/webhook?repo_token=${COVERALLS_REPO_TOKEN}" -d "payload[build_num]=${CIRCLE_BUILD_NUM}&payload[status]=done"
+            fi
       - run:
           name: Check Test Coverage
           command: |
@@ -182,7 +186,7 @@ jobs:
   build-docs:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.7.4
+      - image: circleci/python:3.7.3
     steps:
       - checkout
       - attach_workspace:
@@ -211,7 +215,7 @@ workflows:
       - build-docs:
           requires:
             - build
-      - report-test-coverage:
+      - check-test-coverage:
           requires:
             - test-client
             - test-python

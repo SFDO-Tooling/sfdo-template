@@ -69,7 +69,10 @@ const App = withRouter(
               <ErrorBoundary>
                 <Switch>
                   <Route exact path={routePatterns.home()} component={Home} />
-                  <Route path={routePatterns.auth_error()} component={AuthError} />
+                  <Route
+                    path={routePatterns.auth_error()}
+                    component={AuthError}
+                  />
                   <Route component={FourOhFour} />
                 </Switch>
               </ErrorBoundary>
@@ -151,7 +154,7 @@ initializeI18n((i18nError?: string) => {
             standardSprite={standardSprite}
             utilitySprite={utilitySprite}
           >
-            <App />
+            <App dispatch={appStore.dispatch} />
           </IconSettings>
         </BrowserRouter>
       </Provider>,

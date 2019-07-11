@@ -62,10 +62,10 @@ Finally, set the following environment variables::
 
 Now run ``workon {{cookiecutter.project_slug}}`` again to set those environment variables.
 
-Your ``PATH`` (and environment variables) will be updated when you
-``workon {{cookiecutter.project_slug}}`` and restored when you ``deactivate``. This will make sure
-that whenever you are working on the project, you use the project-specific version of Node
-instead of any system-wide Node you may have.
+Your ``PATH`` (and environment variables) will be updated when you ``workon
+{{cookiecutter.project_slug}}`` and restored when you ``deactivate``. This will make sure that
+whenever you are working on the project, you use the project-specific version of
+Node instead of any system-wide Node you may have.
 
 **All of the remaining steps assume that you have the virtualenv activated.**
 (``workon {{cookiecutter.project_slug}}``)

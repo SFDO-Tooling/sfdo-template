@@ -135,11 +135,7 @@ describe('refetchAllData', () => {
 
       expect.assertions(1);
       return store.dispatch(actions.refetchAllData()).then(() => {
-        expect(store.getActions()).toEqual([
-          started,
-          succeeded,
-          loggedIn,
-        ]);
+        expect(store.getActions()).toEqual([started, succeeded, loggedIn]);
       });
     });
 

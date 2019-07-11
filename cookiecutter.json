@@ -1,20 +1,20 @@
 {
-    "project_name": "Project Name",
-    "project_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '_')|replace('-', '_') }}",
-    "github_username": "SFDO-Tooling",
-    "author_name": "Salesforce.org",
-    "email": "contact@salesforce.org",
-    "description": "A short description of the project.",
-    "domain_name": "example.com",
-    "version": "0.1.0",
-    "open_source_license": [
-        "Not open source",
-        "MIT",
-        "BSD",
-        "GPLv3",
-        "Apache Software License 2.0"
-    ],
-    "use_bucketeer_aws_for_file_storage": "y",
-    "node_version": "lts",
-    "yarn_version": "latest"
+  "project_name": "Project Name",
+  "project_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '_')|replace('-', '_') }}",
+  "github_username": "SFDO-Tooling",
+  "author_name": "Salesforce.org",
+  "email": "contact@salesforce.org",
+  "description": "A short description of the project.",
+  "domain_name": "https://example.com",
+  "version": "0.1.0",
+  "open_source_license": [
+    "Not open source",
+    "MIT",
+    "BSD",
+    "GPLv3",
+    "Apache Software License 2.0"
+  ],
+  "use_bucketeer_aws_for_file_storage": "y",
+  "node_version": "lts",
+  "yarn_version": "latest"
 }
