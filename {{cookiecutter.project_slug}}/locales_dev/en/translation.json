@@ -13,6 +13,7 @@
   "Sandbox or Scratch Org": "Sandbox or Scratch Org",
   "This is sample intro text, where your content might live.": "This is sample intro text, where your content might live.",
   "To go to your company’s login page, enter the custom domain name.": "To go to your company’s login page, enter the custom domain name.",
+  "Uh oh, we've encountered an error. You may need to": "Uh oh, we've encountered an error. You may need to",
   "Use Custom Domain": "Use Custom Domain",
   "Welcome to {{cookiecutter.project_name}}!": "Welcome to {{cookiecutter.project_name}}!",
   "You are in offline mode. We are trying to reconnect, but you may need to": "You are in offline mode. We are trying to reconnect, but you may need to",

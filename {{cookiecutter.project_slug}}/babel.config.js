@@ -1,6 +1,6 @@
 'use strict';
 
-const presets = ['@babel/preset-react', '@babel/preset-flow'];
+const presets = ['@babel/preset-react', '@babel/preset-typescript'];
 
 module.exports = {
   presets: [
@@ -9,9 +9,8 @@ module.exports = {
       '@babel/preset-env',
       {
         modules: false,
-        corejs: '2',
+        corejs: '3',
         useBuiltIns: 'usage',
-        exclude: ['transform-regenerator'],
       },
     ],
   ],
@@ -21,7 +20,10 @@ module.exports = {
   ],
   env: {
     test: {
-      presets: [...presets, '@babel/preset-env'],
+      presets: [
+        ...presets,
+        ['@babel/preset-env', { targets: { node: 'current' } }],
+      ],
     },
   },
 };

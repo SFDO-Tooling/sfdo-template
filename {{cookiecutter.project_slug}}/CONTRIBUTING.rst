@@ -6,8 +6,8 @@ Cloning the project
 
 ::
 
-    git clone git@github.com:{{cookiecutter.github_username}}/{{cookiecutter.project_slug}}
-    cd {{cookiecutter.project_slug}}
+    $ git clone git@github.com:{{cookiecutter.github_username}}/{{cookiecutter.project_slug}}
+    $ cd {{cookiecutter.project_slug}}
 
 Making a virtual env
 --------------------
@@ -24,30 +24,37 @@ temporarily for a particular "environment" or directory. We use
 `virtualenvwrapper`_. Assuming you're in the repo root, do the following to
 create a virtualenv (once you have `virtualenvwrapper`_ installed locally)::
 
-    mkvirtualenv {{cookiecutter.project_slug}} --python=$(which python3.7)
-    setvirtualenvproject
+    $ mkvirtualenv {{cookiecutter.project_slug}} --python=$(which python3.7)
+    $ setvirtualenvproject
 
 Install Python requirements::
 
-    pip install -Ur requirements/local.txt
+    $ pip install -Ur requirements/local.txt
 
-Copy the ``.env`` file somewhere that will be sourced when you need it::
+Copy the ``env.example`` file somewhere that will be sourced when you need it::
 
-    cp env.example $VIRTUAL_ENV/bin/postactivate
+    $ cp env.example $VIRTUAL_ENV/bin/postactivate
 
 Edit this file to change ``DJANGO_SECRET_KEY`` and ``DJANGO_HASHID_SALT`` to any
-two different arbitrary string values. Also set ``DB_ENCRYPTION_KEY``::
+two different arbitrary string values.
 
-    python manage.py shell
-    from cryptography.fernet import Fernet
-    Fernet.generate_key()
+Next, run the following commands to generate a database encryption key::
 
-This will output a bytestring, e.g. ``b'mystring='``. Copy just the contents of
-``'...'``, e.g. ``export DB_ENCRYPTION_KEY='mystring='``.
+    $ python manage.py shell
+    >>> from cryptography.fernet import Fernet
+    >>> Fernet.generate_key()
+
+This will output a bytestring, e.g. ``b'mystring='``. Copy only the contents of
+``'...'``, and add it to your ``$VIRTUAL_ENV/bin/postactivate`` file as
+``DB_ENCRYPTION_KEY``, e.g. ``export DB_ENCRYPTION_KEY="mystring="``.
+
+To exit the Python shell, press ``Ctrl-Z`` and then ``Enter`` on Windows, or
+``Ctrl-D`` on OS X or Linux. Alternatively, you could also type the Python
+command ``exit()`` and press ``Enter``.
 
 {%- if cookiecutter.use_bucketeer_aws_for_file_storage == 'y' %}
 
-Finally, add the following environment variables::
+Finally, set the following environment variables::
 
     export BUCKETEER_AWS_ACCESS_KEY_ID=...
     export BUCKETEER_AWS_SECRET_ACCESS_KEY=...
@@ -55,10 +62,10 @@ Finally, add the following environment variables::
 
 Now run ``workon {{cookiecutter.project_slug}}`` again to set those environment variables.
 
-Your ``PATH`` (and environment variables) will be updated when you
-``workon {{cookiecutter.project_slug}}`` and restored when you ``deactivate``. This will make sure
-that whenever you are working on the project, you use the project-specific version of Node
-instead of any system-wide Node you may have.
+Your ``PATH`` (and environment variables) will be updated when you ``workon
+{{cookiecutter.project_slug}}`` and restored when you ``deactivate``. This will make sure that
+whenever you are working on the project, you use the project-specific version of
+Node instead of any system-wide Node you may have.
 
 **All of the remaining steps assume that you have the virtualenv activated.**
 (``workon {{cookiecutter.project_slug}}``)
@@ -75,14 +82,15 @@ versions).
 
 To download and install the project-local version of Node (and `yarn`_)::
 
-    bin/unpack-node
+    $ bin/unpack-node
 
-If you can run ``which node`` and see a path inside your project directory ending with
-``.../node/bin/node``, then you've got it set up right and can move on.
+If you can run ``which node`` and see a path inside your project directory
+ending with ``.../node/bin/node``, then you've got it set up right and can move
+on.
 
 Then use ``yarn`` to install dependencies::
 
-    yarn
+    $ yarn
 
 .. _Node.js: http://nodejs.org
 .. _yarn: https://yarnpkg.com/
@@ -93,11 +101,11 @@ Setting up the database
 Assuming you have `Postgres <https://www.postgresql.org/download/>`_ installed
 and running locally::
 
-    createdb {{cookiecutter.project_slug}}
+    $ createdb {{cookiecutter.project_slug}}
 
 Then run the initial migrations::
 
-    python manage.py migrate
+    $ python manage.py migrate
 
 Running the server
 ------------------
@@ -110,7 +118,7 @@ the `Redis Quick Start`_.
 
 To run the local development server::
 
-    yarn serve
+    $ yarn serve
 
 The running server will be available at `<http://localhost:8080/>`_.
 
@@ -123,17 +131,16 @@ To setup the Salesforce OAuth integration, run the ``populate_social_apps``
 management command. The values to use in place of the ``XXX`` and ``YYY`` flags
 can be found on the Connected App you've made in your Salesforce configuration::
 
-    python manage.py populate_social_apps --prod-id XXX --prod-secret YYY
+    $ python manage.py populate_social_apps --prod-id XXX --prod-secret YYY
 
-You can also run it with ``--test-id`` and ``--test-secret``, or
-``--cust-id`` and ``--cust-secret``, or all three sets at once, to
-populate all three providers.
+You can also run it with ``--test-id`` and ``--test-secret``, or ``--cust-id``
+and ``--cust-secret``, or all three sets at once, to populate all three
+providers.
 
-Once you've logged in, you probably want to make your user a superuser.
-You can do that easily via the ``promote_superuser`` management
-command::
+Once you've logged in, you probably want to make your user a superuser. You can
+do that easily via the ``promote_superuser`` management command::
 
-    python manage.py promote_superuser <your email>
+    $ python manage.py promote_superuser <your email>
 
 Development Tasks
 -----------------
@@ -147,7 +154,7 @@ Development Tasks
   files
 - ``yarn prettier``: formats ``.scss`` and ``.js`` files
 - ``yarn eslint``: lints ``.js`` files
-- ``yarn flow``: runs JS type-checking
+- ``yarn tsc``: runs JS type-checking
 - ``yarn stylelint``: lints ``.scss`` files
 - ``yarn flake8``: lints ``.py`` files
 - ``yarn build``: builds development (unminified) static assets into ``dist/``

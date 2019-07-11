@@ -29,10 +29,6 @@ def ipv4_networks(val: str) -> List[IPv4Network]:
     return [IPv4Network(s.strip()) for s in val.split(",")]
 
 
-def url_prefix(val: str) -> str:
-    return val.rstrip("/") + "/"
-
-
 class NoDefaultValue:
     pass
 
@@ -191,7 +187,7 @@ AUTH_USER_MODEL = "api.User"
 # URL configuration:
 ROOT_URLCONF = "{{cookiecutter.project_slug}}.urls"
 
-ADMIN_AREA_PREFIX = env("DJANGO_ADMIN_URL", default="admin/", type_=url_prefix)
+ADMIN_AREA_PREFIX = env("DJANGO_ADMIN_URL", default="admin")
 
 ADMIN_API_ALLOWED_SUBNETS = env(
     "ADMIN_API_ALLOWED_SUBNETS", default="127.0.0.1/32", type_=ipv4_networks
@@ -270,7 +266,11 @@ AWS_DEFAULT_ACL = None{% endif %}
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 # This gets overridden in settings.production:
-STATICFILES_DIRS = [str(PROJECT_ROOT / "dist"), str(PROJECT_ROOT / "locales")]
+STATICFILES_DIRS = [
+    str(PROJECT_ROOT / "static"),
+    str(PROJECT_ROOT / "dist"),
+    str(PROJECT_ROOT / "locales"),
+]
 STATIC_URL = "/static/"
 STATIC_ROOT = str(PROJECT_ROOT / "staticfiles")
 
