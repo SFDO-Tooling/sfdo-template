@@ -63,7 +63,7 @@
     "newrelic",
     "sentry"
   ],
-  "buildpacks": [{"url": "heroku/nodejs"}, {"url": "heroku/python"}],
+  "buildpacks": [{ "url": "heroku/nodejs" }, { "url": "heroku/python" }],
   "environments": {
     "test": {
       "scripts": {
