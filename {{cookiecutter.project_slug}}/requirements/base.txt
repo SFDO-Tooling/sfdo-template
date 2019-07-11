@@ -11,8 +11,8 @@ django-model-utils==3.2.0
 django-parler==1.9.2
 django-redis==4.10.0
 django-rq-scheduler==1.1.3
-django-rq==1.2.0  # pyup: <1.3.0
-django-storages==1.7.1
+django-rq==1.2.0  # pyup: <1.3.0{% if cookiecutter.use_bucketeer_aws_for_file_storage == 'y' %}
+django-storages==1.7.1{% endif %}
 Django==2.2.3
 djangorestframework==3.9.4
 logfmt==0.4
