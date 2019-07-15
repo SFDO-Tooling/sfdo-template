@@ -1,2 +1,2 @@
-worker_dev: python manage.py rqworker default
-worker_scheduler: python manage.py rqscheduler default
+worker_dev: python manage.py rqworker default short
+worker_scheduler: python manage.py rqscheduler default short
