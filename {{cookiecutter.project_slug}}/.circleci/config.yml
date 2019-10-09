@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.7.3
+      - image: circleci/python:3.7.4
     steps:
       - checkout
       - restore_cache:
@@ -49,7 +49,7 @@ jobs:
   lint:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.7.3
+      - image: circleci/python:3.7.4
     steps:
       - checkout
       - attach_workspace:
@@ -69,7 +69,7 @@ jobs:
   test-client:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.7.3
+      - image: circleci/python:3.7.4
     steps:
       - checkout
       - attach_workspace:
@@ -96,7 +96,7 @@ jobs:
   test-python:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.7.3
+      - image: circleci/python:3.7.4
         environment:
           BUCKETEER_AWS_ACCESS_KEY_ID: circle_test
           BUCKETEER_AWS_SECRET_ACCESS_KEY: circle_test
@@ -152,7 +152,7 @@ jobs:
   check-test-coverage:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.7.3
+      - image: circleci/python:3.7.4
     environment:
       COVERALLS_PARALLEL: true
     steps:
@@ -186,7 +186,7 @@ jobs:
   build-docs:
     working_directory: ~/{{cookiecutter.project_slug}}
     docker:
-      - image: circleci/python:3.7.3
+      - image: circleci/python:3.7.4
     steps:
       - checkout
       - attach_workspace:
