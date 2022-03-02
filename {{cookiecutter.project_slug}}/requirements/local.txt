@@ -3,4 +3,4 @@
 -r test.txt
 
 django-extensions==2.2.1
-ipython==7.8.0
+ipython==7.16.3
